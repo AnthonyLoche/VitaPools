@@ -1,0 +1,300 @@
+/* ============================================
+   FOOTER
+   ============================================ */
+.footer {
+  background-color: #003257;
+  color: #ffffff;
+  padding: 64px 0 32px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ============================================
+   GRID
+   ============================================ */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+  margin-bottom: 64px;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+  }
+}
+
+/* ============================================
+   BRAND COLUMN
+   ============================================ */
+.brandColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.brandHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  height: 40px;
+  width: auto;
+}
+
+.brandName {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.brandDescription {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(224, 227, 230, 0.8);
+  max-width: 320px;
+}
+
+/* ============================================
+   SOCIAL LINKS
+   ============================================ */
+.socialLinks {
+  display: flex;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.socialLink {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.socialLink:hover {
+  background: #0062a1;
+  transform: scale(1.05);
+}
+
+/* ============================================
+   COLUMN TITLE
+   ============================================ */
+.columnTitle {
+  font-family: 'Geist', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #d0e4ff;
+  margin-bottom: 24px;
+}
+
+/* ============================================
+   LINK LISTS
+   ============================================ */
+.linkList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.link {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(224, 227, 230, 0.7);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.link:hover {
+  color: #ffffff;
+}
+
+/* ============================================
+   CONTACT LIST
+   ============================================ */
+.contactList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(224, 227, 230, 0.7);
+}
+
+.contactIcon {
+  color: #d0e4ff;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   FOOTER BOTTOM
+   ============================================ */
+.footerBottom {
+  padding-top: 32px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(224, 227, 230, 0.5);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .footerBottom {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+}
+
+/* ============================================
+   RESPONSIVIDADE
+   ============================================ */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .footer {
+    padding: 48px 0 24px;
+  }
+
+  .grid {
+    margin-bottom: 48px;
+  }
+
+  .brandDescription {
+    max-width: 100%;
+  }
+}
+
+/* Telemóveis */
+@media (max-width: 768px) {
+  .footer {
+    padding: 40px 0 20px;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  .grid {
+    gap: 32px;
+    margin-bottom: 32px;
+  }
+
+  .brandHeader {
+    gap: 8px;
+  }
+
+  .logo {
+    height: 32px;
+  }
+
+  .brandName {
+    font-size: 20px;
+  }
+
+  .brandDescription {
+    font-size: 13px;
+  }
+
+  .columnTitle {
+    font-size: 11px;
+    margin-bottom: 16px;
+  }
+
+  .linkList,
+  .contactList {
+    gap: 12px;
+  }
+
+  .link,
+  .contactItem {
+    font-size: 13px;
+  }
+
+  .footerBottom {
+    font-size: 11px;
+    gap: 4px;
+  }
+}
+
+/* Telemóveis pequenos */
+@media (max-width: 480px) {
+  .footer {
+    padding: 32px 0 16px;
+  }
+
+  .grid {
+    gap: 24px;
+  }
+
+  .logo {
+    height: 28px;
+  }
+
+  .brandName {
+    font-size: 18px;
+  }
+
+  .brandDescription {
+    font-size: 12px;
+  }
+
+  .link,
+  .contactItem {
+    font-size: 12px;
+  }
+
+  .socialLink {
+    width: 36px;
+    height: 36px;
+  }
+
+  .socialLink svg {
+    width: 18px;
+    height: 18px;
+  }
+}

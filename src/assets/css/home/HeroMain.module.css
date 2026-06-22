@@ -1,0 +1,299 @@
+/* ============================================
+   HERO SECTION
+   ============================================ */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-top: 80px;
+  overflow: hidden;
+}
+
+/* ============================================
+   BACKGROUND
+   ============================================ */
+.heroBackground {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 98, 161, 0.1) 0%,
+    transparent 40%,
+    rgba(247, 249, 252, 0.7) 70%,
+    rgba(247, 249, 252, 0.95) 85%,
+    rgba(247, 249, 252, 1) 100%
+  );
+}
+
+.heroImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ============================================
+   CONTENT
+   ============================================ */
+.heroContent {
+  position: relative;
+  z-index: 20;
+  width: 100%;
+  padding: 0 24px;
+}
+
+.heroContainer {
+  margin: 0 auto;
+  width: 85%;
+}
+
+.heroText {
+  max-width: 672px;
+}
+
+/* ============================================
+   BADGE
+   ============================================ */
+.heroBadge {
+  display: block;
+  color: #009dff;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  font-size: 14px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+/* ============================================
+   TITLE
+   ============================================ */
+.heroTitle {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  color: #fff;
+  margin-bottom: 24px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* ============================================
+   DESCRIPTION
+   ============================================ */
+.heroDescription {
+  font-family: "Inter", sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #191c1e;
+  margin-bottom: 32px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  max-width: 600px;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.heroButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.primaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #009dff;
+  color: #003257;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.primaryButton:hover {
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
+}
+
+.secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 98, 161, 0.2);
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #191c1e;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 20px 40px rgba(4, 27, 45, 0.05);
+  cursor: pointer;
+}
+
+.secondaryButton:hover {
+  background: rgba(255, 255, 255, 0.6);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   FEATURES
+   ============================================ */
+.heroFeatures {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .heroFeatures {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.featureItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #0062a1;
+}
+
+.featureIcon {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.featureText {
+  font-family: "Geist", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ============================================
+   RESPONSIVIDADE
+   ============================================ */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .heroTitle {
+    font-size: 48px;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    font-size: 20px;
+    padding: 14px 28px;
+  }
+}
+
+/* Telemóveis grandes */
+@media (max-width: 768px) {
+  .hero {
+    padding-top: 64px;
+    min-height: 90vh;
+  }
+
+  .heroTitle {
+    font-size: 32px;
+  }
+
+  .heroDescription {
+    font-size: 16px;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    font-size: 16px;
+    padding: 12px 24px;
+    border-radius: 8px;
+  }
+
+  .heroButtons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .heroFeatures {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .heroBadge {
+    font-size: 12px;
+  }
+}
+
+/* Telemóveis pequenos */
+@media (max-width: 480px) {
+  .heroTitle {
+    font-size: 28px;
+  }
+
+  .heroContent {
+    padding: 0 16px;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+
+  .featureText {
+    font-size: 10px;
+  }
+}
+
+/* ============================================
+   CANVAS (para partículas/background animado)
+   ============================================ */
+.heroBackground canvas {
+  position: absolute !important;
+  inset: 0;
+  z-index: 5;
+}
+
+.heroOverlay {
+  z-index: 10;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 20;
+}

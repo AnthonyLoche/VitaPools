@@ -1,0 +1,198 @@
+/* ============================================
+   FAQ SECTION
+   ============================================ */
+.faq {
+  padding: 80px 0;
+  background-color: #f2f4f7;
+}
+
+.container {
+    width: 65%;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ============================================
+   TITLE
+   ============================================ */
+.title {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #191c1e;
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 32px;
+    margin-bottom: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 28px;
+    margin-bottom: 24px;
+  }
+}
+
+/* ============================================
+   LIST
+   ============================================ */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ============================================
+   ITEM
+   ============================================ */
+.item {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 20px 40px rgba(4, 27, 45, 0.05);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+.item:hover {
+  box-shadow: 0 20px 40px rgba(4, 27, 45, 0.1);
+}
+
+/* ============================================
+   QUESTION
+   ============================================ */
+.question {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #191c1e;
+  transition: background 0.2s ease;
+  gap: 16px;
+}
+
+.question:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 768px) {
+  .question {
+    font-size: 20px;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .question {
+    font-size: 18px;
+    padding: 16px;
+  }
+}
+
+.questionText {
+  flex: 1;
+}
+
+/* ============================================
+   ICON
+   ============================================ */
+.icon {
+  flex-shrink: 0;
+  color: #0062a1;
+  transition: transform 0.3s ease;
+}
+
+.iconOpen {
+  transform: rotate(180deg);
+}
+
+/* ============================================
+   ANSWER
+   ============================================ */
+.answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  padding: 0 24px;
+}
+
+.answerOpen {
+  max-height: 300px;
+  padding: 0 24px 24px;
+}
+
+.answerText {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #3f4752;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .answerText {
+    font-size: 14px;
+  }
+
+  .answerOpen {
+    padding: 0 20px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .answerText {
+    font-size: 13px;
+  }
+
+  .answerOpen {
+    padding: 0 16px 16px;
+  }
+}
+
+/* ============================================
+   RESPONSIVIDADE
+   ============================================ */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .faq {
+    padding: 60px 0;
+  }
+}
+
+/* Telemóveis grandes */
+@media (max-width: 768px) {
+  .faq {
+    padding: 48px 0;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+}
+
+/* Telemóveis pequenos */
+@media (max-width: 480px) {
+  .faq {
+    padding: 32px 0;
+  }
+}

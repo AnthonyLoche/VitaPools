@@ -1,0 +1,408 @@
+/* ============================================
+   PROCESS SECTION
+   ============================================ */
+.process {
+  padding: 80px 0;
+  background-color: #fff;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ============================================
+   WAVIFY CONTAINER
+   ============================================ */
+.wavifyContainer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+  rotate: calc(180deg);
+}
+
+.wavifyContainer2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+  rotate: calc(180deg);
+}
+
+.wavifyContainer svg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 2;
+}
+
+/* ============================================
+   DECORAÇÃO DE FUNDO
+   ============================================ */
+.decoration {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 33.333%;
+  height: 100%;
+  opacity: 0.1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.decorationIcon {
+  position: absolute;
+  right: -80px;
+  top: -80px;
+  color: #003257;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+.header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.title {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #003257;
+  margin-bottom: 16px;
+}
+
+.subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #003257;
+  max-width: 512px;
+  margin: 0 auto;
+}
+
+/* ============================================
+   GRID
+   ============================================ */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 48px;
+  }
+}
+
+/* ============================================
+   CONNECTOR LINE (Desktop)
+   ============================================ */
+.connector {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .connector {
+    display: block;
+    position: absolute;
+    top: 48px;
+    left: 10%;
+    right: 10%;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      #0062a1 15%,
+      #009dff 50%,
+      #0062a1 85%,
+      transparent 100%
+    );
+    border-radius: 2px;
+    z-index: 0;
+    opacity: 0.6;
+    box-shadow: 0 0 20px rgba(0, 98, 161, 0.3);
+  }
+
+  /* Pontos na linha */
+  .connector::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 0;
+    width: 100%;
+    height: 11px;
+    background-image: radial-gradient(circle, #0062a1 2px, transparent 2px);
+    background-size: 24px 11px;
+    background-position: 0 0;
+    background-repeat: repeat-x;
+    opacity: 0.4;
+  }
+
+  /* Brilho animado na linha */
+  .connector::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -100%;
+    width: 60%;
+    height: 7px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(0, 157, 255, 0.8),
+      transparent
+    );
+    border-radius: 50%;
+    animation: connectorGlow 3s ease-in-out infinite;
+    filter: blur(4px);
+  }
+
+  @keyframes connectorGlow {
+    0% {
+      left: -100%;
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      left: 140%;
+      opacity: 0;
+    }
+  }
+}
+
+/* ============================================
+   STEP
+   ============================================ */
+.step {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.stepIcon {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background-color: #0062a1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 4px solid #001d35;
+  transition: transform 0.3s ease;
+}
+
+.step:hover .stepIcon {
+  transform: scale(1.05);
+}
+
+.icon {
+  color: #ffffff;
+}
+
+.stepTitle {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #003257;
+  margin-bottom: 8px;
+}
+
+.stepDescription {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(0, 49, 87, 0.856);
+  max-width: 200px;
+  margin: 0 auto;
+}
+
+/* ============================================
+   RESPONSIVIDADE
+   ============================================ */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .process {
+    padding: 60px 0;
+  }
+
+  .title {
+    font-size: 32px;
+  }
+
+  .header {
+    margin-bottom: 48px;
+  }
+
+  .stepIcon {
+    width: 80px;
+    height: 80px;
+  }
+
+  .stepTitle {
+    font-size: 20px;
+  }
+
+  .wavifyContainer {
+    height: 80px;
+  }
+
+  .connector {
+    left: 8% !important;
+    right: 8% !important;
+  }
+}
+
+/* Telemóveis grandes */
+@media (max-width: 768px) {
+  .process {
+    padding: 48px 0;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  .title {
+    font-size: 28px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+
+  .header {
+    margin-bottom: 32px;
+  }
+
+  .grid {
+    gap: 32px;
+  }
+
+  .stepIcon {
+    width: 72px;
+    height: 72px;
+  }
+
+  .icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .stepTitle {
+    font-size: 18px;
+  }
+
+  .stepDescription {
+    font-size: 13px;
+    max-width: 100%;
+  }
+
+  .decoration {
+    width: 50%;
+  }
+
+  .decorationIcon {
+    right: -40px;
+    top: -40px;
+    width: 250px;
+    height: 250px;
+  }
+
+  .wavifyContainer {
+    height: 60px;
+  }
+
+  /* Esconder connector no mobile */
+  .connector {
+    display: none !important;
+  }
+}
+
+/* Telemóveis pequenos */
+@media (max-width: 480px) {
+  .process {
+    padding: 32px 0;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+  }
+
+  .grid {
+    gap: 24px;
+  }
+
+  .stepIcon {
+    width: 64px;
+    height: 64px;
+    border-width: 3px;
+  }
+
+  .icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .stepTitle {
+    font-size: 16px;
+  }
+
+  .stepDescription {
+    font-size: 12px;
+  }
+
+  .decoration {
+    width: 60%;
+  }
+
+  .decorationIcon {
+    right: -30px;
+    top: -30px;
+    width: 200px;
+    height: 200px;
+  }
+
+  .wavifyContainer {
+    height: 50px;
+  }
+
+  /* Esconder connector no mobile */
+  .connector {
+    display: none !important;
+  }
+}
