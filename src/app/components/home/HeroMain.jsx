@@ -3,6 +3,7 @@
 import React from "react";
 import styles from "@/assets/css/home/HeroMain.module.css";
 import hero_video from "@/assets/videos/hero.mp4";
+import Link from "next/link";
 
 import WaterCanvas from "./WaterCanvas";
 
@@ -37,13 +38,13 @@ const HeroMain = () => {
             </p>
 
             <div className={styles.heroButtons}>
-              <a className={styles.primaryButton} href="#contato">
+              <Link href="/budget" className={styles.primaryButton}>
                 Pedir Orçamento
-              </a>
+              </Link>
 
-              <a className={styles.secondaryButton} href="#servicos">
+              <Link href="/services" className={styles.secondaryButton}>
                 Ver Serviços
-              </a>
+              </Link>
             </div>
 
             <div className={styles.heroFeatures}>
