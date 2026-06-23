@@ -108,7 +108,7 @@
   justify-content: center;
   align-items: center;
 
-  background: #0062a1;
+  background: var(--color-primary);
   color: #ffffff;
 
   border-radius: 999px;

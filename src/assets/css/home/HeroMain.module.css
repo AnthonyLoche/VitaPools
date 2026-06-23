@@ -65,7 +65,7 @@
    ============================================ */
 .heroBadge {
   display: block;
-  color: #009dff;
+  color: #000080;
   font-weight: 700;
   letter-spacing: 0.1em;
   font-size: 14px;
@@ -115,8 +115,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: #009dff;
-  color: #003257;
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
   padding: 16px 32px;
   border-radius: 12px;
   font-family: "Hanken Grotesk", sans-serif;

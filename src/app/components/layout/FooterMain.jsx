@@ -8,7 +8,7 @@ import {
   Camera,
 } from "lucide-react";
 import styles from "@/assets/css/layout/FooterMain.module.css";
-import logo from "@/assets/images/logo_h_remove.png";
+import logo from "@/assets/images/logo_h_removed_white.png";
 import Image from "next/image";
 
 const Footer = () => {

@@ -68,7 +68,7 @@ const HeaderMain = () => {
 
       <div className={styles.waveContainer}>
         <Wavify
-          fill="#0062A1"
+          fill="#000080"
           paused={false}
           options={{
             height: 6,

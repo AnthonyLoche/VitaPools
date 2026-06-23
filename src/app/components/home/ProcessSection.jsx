@@ -43,7 +43,7 @@ const ProcessSection = () => {
       {/* Wavify Background */}
       <div className={styles.wavifyContainer}>
         <Wavify
-          fill="#003257"
+          fill="#000080"
           paused={false}
           options={{
             height: 45,
@@ -55,7 +55,7 @@ const ProcessSection = () => {
       </div>
             <div className={styles.wavifyContainer2}>
         <Wavify
-          fill="#003257"
+          fill="#000080"
           paused={false}
           options={{
             height: 60,

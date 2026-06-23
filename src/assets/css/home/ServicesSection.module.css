@@ -33,7 +33,7 @@
 
 .badge {
   display: block;
-  color: #0062a1;
+  color: var(--color-primary);
   font-weight: 700;
   letter-spacing: 0.1em;
   font-size: 12px;

@@ -124,7 +124,7 @@
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  background-color: #0062a1;
+  background-color: #000080;
   color: #ffffff;
   padding: 20px 40px;
   border-radius: 16px;
@@ -206,7 +206,7 @@
 }
 
 .featureIcon {
-  color: #0062a1;
+  color: #000080;
 }
 
 .featureText {

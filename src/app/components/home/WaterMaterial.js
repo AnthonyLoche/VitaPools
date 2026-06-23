@@ -8,7 +8,7 @@ export const WaterMaterial = shaderMaterial(
 {
   uTime:0,
   uMouse:new THREE.Vector2(),
-  uColor:new THREE.Color("#0062a1")
+  uColor:new THREE.Color("#000080")
 },
 
 // Vertex Shader
