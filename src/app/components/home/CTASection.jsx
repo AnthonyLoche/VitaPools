@@ -8,15 +8,19 @@ import {
   ArrowRight,
 } from "lucide-react";
 import styles from "@/assets/css/home/CTASection.module.css";
+import Image from "next/image";
+import background from "@/assets/images/cta.jpg";
 
 const CTASection = () => {
   return (
     <section className={styles.cta} id="contato">
       <div className={styles.background}>
-        <img
+        <Image
           alt="Luxury Pool Background"
           className={styles.backgroundImage}
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuAphnWohYRJBHm_R8Y0h7vtNWV61z-QY1gkFu68aU_LJZMJl_-yRBsC6IP25c50yNfnDhRE_D_ghwmiKRsRRkItxg_5n1Whd6Rw4-A-sNCgobNErT1TlmsmFOXVXPuG9RYoUwhsOyebbicj0GdWWkcc9-uRfnFmc0VAgdqk3CPlBlDObbjK9IqwOHjGHH4mdryfRD5Ew0p9Pug3gL3Ig7xyLdLMvhHOe1iVXYOlcMHFuhV9DDXYFHQtIh322QnJZWWRElJo4aGLww"
+          src={background}
+          fill
+          style={{ objectFit: "cover" }}
         />
         <div className={styles.backgroundOverlay}></div>
       </div>
