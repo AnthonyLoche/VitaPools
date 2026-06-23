@@ -71,7 +71,7 @@ const HeaderMain = () => {
           fill="#000080"
           paused={false}
           options={{
-            height: 6,
+            height: 10,
             amplitude: amplitude,
             speed: 0.25,
             points: 10,

@@ -11,7 +11,7 @@
 
 /* ── HERO ── */
 .hero {
-  background: linear-gradient(165deg, #0A2647 0%, #071B33 55%, #0A4A5F 130%);
+  background: linear-gradient(165deg, #000080 0%, #001a4d 55%, #003257 130%);
   color: #ffffff;
   padding: 60px 0 80px;
   position: relative;
@@ -32,7 +32,7 @@
   font-size: 0.76rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #5FAFC9;
+  color: #009dff;
   font-weight: 700;
   margin-bottom: 16px;
 }
@@ -85,7 +85,7 @@
   font-size: 0.76rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #1C7C9C;
+  color: #0062a1;
   font-weight: 700;
   margin-bottom: 12px;
 }
@@ -94,7 +94,7 @@
   font-family: 'Hanken Grotesk', sans-serif;
   font-size: 32px;
   font-weight: 600;
-  color: #0A2647;
+  color: #000080;
   margin-bottom: 12px;
 }
 
@@ -116,8 +116,8 @@
   background: #ffffff;
   border-radius: 24px;
   padding: 40px;
-  box-shadow: 0 24px 60px -24px rgba(10, 38, 71, 0.28);
-  border: 1px solid rgba(10, 38, 71, 0.06);
+  box-shadow: 0 24px 60px -24px rgba(0, 0, 128, 0.28);
+  border: 1px solid rgba(0, 0, 128, 0.06);
 }
 
 .medicoProgress {
@@ -130,12 +130,12 @@
   height: 4px;
   border-radius: 4px;
   flex: 1;
-  background: rgba(10, 38, 71, 0.12);
+  background: rgba(0, 0, 128, 0.12);
   transition: background 0.2s ease;
 }
 
 .stepDot.stepDone {
-  background: #C9A24B;
+  background: #0062a1;
 }
 
 .medicoStep {
@@ -157,7 +157,7 @@
   font-family: 'Hanken Grotesk', sans-serif;
   font-size: 24px;
   font-weight: 600;
-  color: #0A2647;
+  color: #000080;
   margin-bottom: 8px;
 }
 
@@ -184,12 +184,12 @@
   padding: 14px 18px;
   border-radius: 12px;
   background: rgba(244, 248, 249, 0.6);
-  border: 1px solid rgba(10, 38, 71, 0.08);
+  border: 1px solid rgba(0, 0, 128, 0.08);
   cursor: pointer;
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   font-weight: 500;
-  color: #0A2647;
+  color: #000080;
   text-align: left;
   display: flex;
   align-items: center;
@@ -198,13 +198,13 @@
 }
 
 .medicoOpt:hover {
-  border-color: #C9A24B;
-  background: rgba(201, 162, 75, 0.06);
+  border-color: #0062a1;
+  background: rgba(0, 98, 161, 0.06);
 }
 
 .medicoOptIcon {
   flex-shrink: 0;
-  color: #1C7C9C;
+  color: #0062a1;
 }
 
 .medicoBack {
@@ -222,7 +222,7 @@
 }
 
 .medicoBack:hover {
-  color: #0A2647;
+  color: #0062a1;
 }
 
 /* ── Resultado Médico ── */
@@ -249,8 +249,8 @@
 }
 
 .urgencyMedia {
-  background: rgba(201, 162, 75, 0.18);
-  color: #C9A24B;
+  background: rgba(0, 98, 161, 0.15);
+  color: #0062a1;
 }
 
 .urgencyAlta {
@@ -262,7 +262,7 @@
   font-family: 'Hanken Grotesk', sans-serif;
   font-size: 22px;
   font-weight: 600;
-  color: #0A2647;
+  color: #000080;
   margin-bottom: 16px;
 }
 
@@ -271,7 +271,7 @@
   border-radius: 14px;
   padding: 20px 24px;
   margin-bottom: 24px;
-  border: 1px solid rgba(10, 38, 71, 0.06);
+  border: 1px solid rgba(0, 0, 128, 0.06);
 }
 
 .medicoResultDetail p {
@@ -287,8 +287,8 @@
   display: inline-flex;
   align-items: center;
   padding: 14px 28px;
-  background: #C9A24B;
-  color: #0A2647;
+  background: #0062a1;
+  color: #ffffff;
   border-radius: 100px;
   font-weight: 600;
   font-size: 15px;
@@ -297,8 +297,9 @@
 }
 
 .medicoCta:hover {
+  background: #00497b;
   transform: translateY(-2px);
-  box-shadow: 0 12px 26px -8px rgba(201, 162, 75, 0.5);
+  box-shadow: 0 12px 26px -8px rgba(0, 98, 161, 0.5);
 }
 
 .medicoRestart {
@@ -316,7 +317,7 @@
 }
 
 .medicoRestart:hover {
-  color: #0A2647;
+  color: #0062a1;
 }
 
 /* ── ASSISTENTE DE PRODUTOS ── */
@@ -328,8 +329,8 @@
   background: #ffffff;
   border-radius: 24px;
   padding: 40px;
-  box-shadow: 0 24px 60px -24px rgba(10, 38, 71, 0.28);
-  border: 1px solid rgba(10, 38, 71, 0.06);
+  box-shadow: 0 24px 60px -24px rgba(0, 0, 128, 0.28);
+  border: 1px solid rgba(0, 0, 128, 0.06);
 }
 
 .assistRow {
@@ -364,24 +365,25 @@
 .assistField input {
   width: 100%;
   padding: 12px 14px;
-  border: 1.5px solid rgba(10, 38, 71, 0.1);
+  border: 1.5px solid rgba(0, 0, 128, 0.1);
   border-radius: 10px;
   font-family: 'Inter', sans-serif;
   font-size: 15px;
   background: #f7f9fc;
-  color: #0A2647;
+  color: #000080;
   transition: border-color 0.2s ease;
 }
 
 .assistField input:focus {
-  border-color: #1C7C9C;
+  border-color: #0062a1;
   outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 98, 161, 0.1);
 }
 
 .assistButton {
   width: 100%;
   padding: 14px;
-  background: #0A2647;
+  background: #000080;
   color: #ffffff;
   border: none;
   border-radius: 12px;
@@ -393,8 +395,9 @@
 }
 
 .assistButton:hover {
-  background: #071B33;
+  background: #000066;
   transform: translateY(-2px);
+  box-shadow: 0 8px 24px -8px rgba(0, 0, 128, 0.3);
 }
 
 .assistResult {
@@ -410,8 +413,8 @@
 }
 
 .assistResult.action {
-  background: rgba(201, 162, 75, 0.08);
-  border: 1px solid rgba(201, 162, 75, 0.25);
+  background: rgba(0, 98, 161, 0.08);
+  border: 1px solid rgba(0, 98, 161, 0.25);
 }
 
 .assistResult.warning {
@@ -423,7 +426,7 @@
   font-family: 'Hanken Grotesk', sans-serif;
   font-size: 18px;
   font-weight: 600;
-  color: #0A2647;
+  color: #000080;
   margin-bottom: 6px;
 }
 
@@ -444,8 +447,8 @@
   background: #ffffff;
   border-radius: 24px;
   padding: 40px;
-  box-shadow: 0 24px 60px -24px rgba(10, 38, 71, 0.28);
-  border: 1px solid rgba(10, 38, 71, 0.06);
+  box-shadow: 0 24px 60px -24px rgba(0, 0, 128, 0.28);
+  border: 1px solid rgba(0, 0, 128, 0.06);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -457,7 +460,7 @@
   font-family: 'Hanken Grotesk', sans-serif;
   font-size: 22px;
   font-weight: 600;
-  color: #0A2647;
+  color: #000080;
   margin-bottom: 8px;
 }
 
@@ -484,7 +487,7 @@
 }
 
 .contactItem svg {
-  color: #1C7C9C;
+  color: #0062a1;
   flex-shrink: 0;
 }
 
@@ -493,7 +496,7 @@
   align-items: center;
   gap: 8px;
   padding: 14px 28px;
-  background: #0A2647;
+  background: #0062a1;
   color: #ffffff;
   border-radius: 100px;
   font-family: 'Inter', sans-serif;
@@ -505,9 +508,9 @@
 }
 
 .contactButton:hover {
-  background: #071B33;
+  background: #00497b;
   transform: translateY(-2px);
-  box-shadow: 0 12px 26px -8px rgba(10, 38, 71, 0.3);
+  box-shadow: 0 12px 26px -8px rgba(0, 98, 161, 0.3);
 }
 
 /* ── RESPONSIVIDADE ── */

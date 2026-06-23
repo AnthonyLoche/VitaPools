@@ -10,6 +10,7 @@ import {
 import styles from "@/assets/css/home/CTASection.module.css";
 import Image from "next/image";
 import background from "@/assets/images/cta.jpg";
+import Link from "next/link";
 
 const CTASection = () => {
   return (
@@ -32,10 +33,10 @@ const CTASection = () => {
             Peça agora o seu orçamento gratuito e personalizado para os nossos serviços premium de manutenção e limpeza.
           </p>
 
-          <a href="mailto:info@vitapools.pt" className={styles.button}>
+          <Link href="/budget" className={styles.button}>
             Solicitar Orçamento Agora
             <ArrowRight size={24} />
-          </a>
+          </Link>
 
           <div className={styles.features}>
             <div className={styles.feature}>
