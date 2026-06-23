@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import {
   User, Ruler, Calendar, Home, Droplets,
   Check, ArrowRight, ArrowLeft, Send, Mail, Phone, FileText,
-  MapPin, Sparkles, Activity, Droplet, Percent, 
+  MapPin, Sparkles, Activity, Droplet, Percent,
   MessageCircle, Download, RefreshCw,
   Waves, Droplets as DropletsIcon,
   Bath, Home as HomeIcon,
@@ -15,52 +15,30 @@ import {
   AlertCircle, CheckCircle, HelpCircle,
   Flower2, Trees,
   CircleCheck,
-  LucideIcon
+  LucideIcon,
+  FileCheck,
+  ClipboardList,
+  Circle,
+  CircleDot,
+  CheckSquare,
+  Square,
 } from "lucide-react";
 import styles from "@/assets/css/budget/main.module.css";
 
-const TOTAL_STEPS = 8;
+const TOTAL_STEPS = 7;
 
 // Mapeamento de ícones para cada step
 const DepthIcon = ({ step }) => {
   const icons = {
     1: <User size={28} />,
-    2: <Mail size={28} />,
-    3: <Phone size={28} />,
-    4: <MapPin size={28} />,
-    5: <Ruler size={28} />,
-    6: <Sparkles size={28} />,
-    7: <Calendar size={28} />,
-    8: <Droplets size={28} />,
+    2: <Phone size={28} />,
+    3: <MapPin size={28} />,
+    4: <Ruler size={28} />,
+    5: <Sparkles size={28} />,
+    6: <Calendar size={28} />,
+    7: <Droplets size={28} />,
   };
   return icons[step] || <FileText size={28} />;
-};
-
-// Mapeamento de ícones para opções de serviços
-const SERVICE_ICONS = {
-  "Limpeza regular": Brush,
-  "Manutenção química": Beaker,
-  "Limpeza e manutenção completa": Wrench,
-  "Consultoria técnica": Gauge,
-  "Verificação e ajuste do pH": Activity,
-  "Limpeza de paredes e fundo": DropletsIcon,
-  "Limpeza de filtros e skimmers": Bath,
-  "Outros": FileText,
-};
-
-// Mapeamento de ícones para estados da piscina
-const STATUS_ICONS = {
-  "Está limpa e cristalina": CircleCheck,
-  "Precisa de manutenção": AlertCircle,
-  "Água verde / turva": Cloud,
-  "Não tenho a certeza": HelpCircle,
-};
-
-// Mapeamento de ícones para sistemas
-const SYSTEM_ICONS = {
-  "Sal": DropletsIcon,
-  "Cloro": Beaker,
-  "Não sei": HelpCircle,
 };
 
 const DEPTH_DATA = [
@@ -71,18 +49,16 @@ const DEPTH_DATA = [
   { label: "−18m", sub: "Quase no fundo..." },
   { label: "−22m", sub: "No fundo..." },
   { label: "−15m", sub: "A subir..." },
-  { label: "−5m",  sub: "Quase na superfície!" },
 ];
 
 const STEP_TITLES = {
   1: "Quem somos?",
-  2: "O seu email",
-  3: "O seu contacto",
-  4: "Onde fica?",
-  5: "Tamanho da piscina",
-  6: "Serviços que precisa",
-  7: "Com que frequência?",
-  8: "Estado atual",
+  2: "O seu contacto",
+  3: "Onde fica?",
+  4: "Tamanho da piscina",
+  5: "Serviços que precisa",
+  6: "Com que frequência?",
+  7: "Estado atual",
 };
 
 /* ── Lerp single float ── */
@@ -168,8 +144,8 @@ export default function BudgetPage() {
   const [bgBot, setBgBot] = useState("#003257");
   const [rayOp, setRayOp] = useState(0);
   const [showDone, setShowDone] = useState(false);
+  const [errors, setErrors] = useState({});
 
-  /* animated depth (0–1) */
   const depthRef = useRef(0);
   const targetRef = useRef(0);
   const rafRef = useRef(null);
@@ -189,7 +165,6 @@ export default function BudgetPage() {
 
   useEffect(() => { setMounted(true); }, []);
 
-  /* depth animation loop */
   useEffect(() => {
     const tick = () => {
       const cur = depthRef.current;
@@ -209,12 +184,10 @@ export default function BudgetPage() {
     return () => cancelAnimationFrame(rafRef.current);
   }, []);
 
-  /* update target when step changes */
   useEffect(() => {
     targetRef.current = targetDepth(step);
   }, [step]);
 
-  /* auto-advance intro */
   useEffect(() => {
     if (step !== 0) return;
     const t = setTimeout(() => transition(() => setStep(1)), 2800);
@@ -226,16 +199,63 @@ export default function BudgetPage() {
     setTimeout(() => { cb(); setVisible(true); }, 550);
   };
 
-  const next = () => transition(() => setStep((s) => Math.min(s + 1, TOTAL_STEPS + 1)));
-  const prev = () => transition(() => setStep((s) => Math.max(s - 1, 1)));
-  const submit = () => {
-    setVisible(false);
-    setTimeout(() => {
-      setStep(TOTAL_STEPS + 1);
-      setShowDone(true);
-      setTimeout(() => setVisible(true), 300);
-    }, 500);
+  const validateStep = (currentStep) => {
+    const newErrors = {};
+
+    switch (currentStep) {
+      case 1:
+        if (!formData.name.trim()) newErrors.name = "Nome é obrigatório";
+        if (!formData.email.trim()) newErrors.email = "Email é obrigatório";
+        else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Email inválido";
+        break;
+      case 2:
+        if (!formData.phone.trim()) newErrors.phone = "Telefone é obrigatório";
+        break;
+      case 3:
+        if (!formData.address.trim()) newErrors.address = "Morada é obrigatória";
+        break;
+      case 4:
+        if (!formData.poolSize) newErrors.poolSize = "Selecione o tamanho da piscina";
+        break;
+      case 5:
+        if (formData.services.length === 0) newErrors.services = "Selecione pelo menos um serviço";
+        break;
+      case 6:
+        if (!formData.frequency) newErrors.frequency = "Selecione a frequência";
+        break;
+      case 7:
+        if (!formData.poolStatus) newErrors.poolStatus = "Selecione o estado da piscina";
+        break;
+      default:
+        break;
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
+
+  const next = () => {
+    if (validateStep(step)) {
+      transition(() => setStep((s) => Math.min(s + 1, TOTAL_STEPS + 1)));
+    }
+  };
+
+  const prev = () => {
+    setErrors({});
+    transition(() => setStep((s) => Math.max(s - 1, 1)));
+  };
+
+  const submit = () => {
+    if (validateStep(step)) {
+      setVisible(false);
+      setTimeout(() => {
+        setStep(TOTAL_STEPS + 1);
+        setShowDone(true);
+        setTimeout(() => setVisible(true), 300);
+      }, 500);
+    }
+  };
+
   const goBack = () => {
     if (step > 1) {
       transition(() => setStep(step - 1));
@@ -243,9 +263,11 @@ export default function BudgetPage() {
       window.location.href = "/";
     }
   };
+
   const reset = () => transition(() => {
     setStep(0);
     setShowDone(false);
+    setErrors({});
     setFormData({
       name: "", email: "", phone: "", address: "",
       poolSize: "", services: [], frequency: "",
@@ -262,19 +284,19 @@ export default function BudgetPage() {
           ? [...f.services, value]
           : f.services.filter((item) => item !== value),
       }));
+      if (errors.services) setErrors((prev) => ({ ...prev, services: null }));
     } else {
       setFormData((f) => ({ ...f, [name]: value }));
+      if (errors[name]) setErrors((prev) => ({ ...prev, [name]: null }));
     }
   };
 
-  /* animated pct for depth meter */
   const [meterPct, setMeterPct] = useState(0);
   useEffect(() => {
     const id = setInterval(() => setMeterPct(depthRef.current), 50);
     return () => clearInterval(id);
   }, []);
 
-  /* Função para gerar a mensagem do WhatsApp */
   const generateWhatsAppMessage = () => {
     const servicesList = formData.services.length > 0 
       ? formData.services.join(", ") 
@@ -302,17 +324,45 @@ export default function BudgetPage() {
 
   const showBack = step >= 1 && step <= TOTAL_STEPS;
 
+  const isStepValid = () => {
+    switch (step) {
+      case 1: return formData.name.trim() && formData.email.trim() && /\S+@\S+\.\S+/.test(formData.email);
+      case 2: return formData.phone.trim();
+      case 3: return formData.address.trim();
+      case 4: return formData.poolSize;
+      case 5: return formData.services.length > 0;
+      case 6: return formData.frequency;
+      case 7: return formData.poolStatus;
+      default: return true;
+    }
+  };
+
   return (
     <div className={styles.shell} style={{ "--bg-top": bgTop, "--bg-bottom": bgBot }}>
 
-      {/* ── water bg ── */}
       <div className={styles.waterBg} aria-hidden="true">
-        <Particles count={step === 0 ? 30 : 16} size={step === 0 ? "lg" : "sm"} />
+        <Particles count={step === 0 ? 40 : 20} size={step === 0 ? "lg" : "sm"} />
         <LightRays opacity={rayOp} />
         {step === 0 && <div className={styles.caustics} />}
+        {step === 0 && (
+          <div className={styles.bubbleContainer}>
+            {[...Array(25)].map((_, i) => (
+              <div
+                key={i}
+                className={styles.entryBubble}
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 4}s`,
+                  animationDuration: `${3 + Math.random() * 5}s`,
+                  width: `${4 + Math.random() * 18}px`,
+                  height: `${4 + Math.random() * 18}px`,
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* ── back button (fixed top-left) ── */}
       {showBack && (
         <button
           onClick={goBack}
@@ -323,29 +373,28 @@ export default function BudgetPage() {
         </button>
       )}
 
-      {/* ── intro ── */}
       {step === 0 && (
         <div className={`${styles.intro} ${visible ? styles.in : styles.out}`}>
-          <img alt="VitaPools" className={styles.introLogo}
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCclMZ1pAIPYRW9r8a-9p4K8UfxWdyCstlnx2XZhnGDNvAdfoDD8MA7chg3aFlB6JTNz8XzHPedQiOACDQbIblyDrr7_XEUj_3ZGQnquqJISNN_nXJdmmhp_dDupUSLU_OCw2cREpuKHpwfVV--uqSLpTCJdas5ZchKMHMGWhx38EJQhqiJMqMABQM1uuVNeBFdxy7xidqdMEH2ptce2Wyo0g-iWN0zZOz2t4X4Z-LRRxriu0CP1Pm13ljCvOAMFzYcGvPMteFHWw"
-          />
-          <p className={styles.introPre}>VitaPools</p>
-          <h1 className={styles.introTitle}>Vamos fazer um orçamento<br />à sua medida</h1>
-          <div className={styles.introWaves} aria-hidden="true">
-            {[0, 1, 2].map((i) => (
-              <div key={i} className={styles.introWaveDot} style={{ "--d": `${i * 0.25}s` }} />
-            ))}
+          <div className={styles.introContent}>
+            <img alt="VitaPools" className={styles.introLogo}
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCclMZ1pAIPYRW9r8a-9p4K8UfxWdyCstlnx2XZhnGDNvAdfoDD8MA7chg3aFlB6JTNz8XzHPedQiOACDQbIblyDrr7_XEUj_3ZGQnquqJISNN_nXJdmmhp_dDupUSLU_OCw2cREpuKHpwfVV--uqSLpTCJdas5ZchKMHMGWhx38EJQhqiJMqMABQM1uuVNeBFdxy7xidqdMEH2ptce2Wyo0g-iWN0zZOz2t4X4Z-LRRxriu0CP1Pm13ljCvOAMFzYcGvPMteFHWw"
+            />
+            <p className={styles.introPre}>VitaPools</p>
+            <h1 className={styles.introTitle}>Vamos fazer um orçamento<br />à sua medida</h1>
+            <div className={styles.introWaves} aria-hidden="true">
+              {[0, 1, 2].map((i) => (
+                <div key={i} className={styles.introWaveDot} style={{ "--d": `${i * 0.25}s` }} />
+              ))}
+            </div>
           </div>
         </div>
       )}
 
-      {/* ── form steps ── */}
       {step >= 1 && step <= TOTAL_STEPS && (
         <div className={`${styles.formScene} ${visible ? styles.in : styles.out}`}>
           <DepthMeter pct={meterPct} />
 
           <div className={styles.formWrap}>
-            {/* progress */}
             <div className={styles.progressRow}>
               <div className={styles.progressTrack}>
                 <div className={styles.progressFill} style={{ width: `${(step / TOTAL_STEPS) * 100}%` }} />
@@ -353,7 +402,6 @@ export default function BudgetPage() {
               <span className={styles.progressLabel}>{step} / {TOTAL_STEPS}</span>
             </div>
 
-            {/* depth badge */}
             <div className={styles.depthInfo}>
               <div className={styles.depthBadge}>
                 <Droplets size={13} />
@@ -362,14 +410,18 @@ export default function BudgetPage() {
               <span className={styles.depthSub}>{DEPTH_DATA[step - 1]?.sub}</span>
             </div>
 
-            {/* card */}
             <div className={styles.card}>
               <div className={styles.cardHeader}>
                 <div className={styles.iconWrap}><DepthIcon step={step} /></div>
                 <h2 className={styles.cardTitle}>{STEP_TITLES[step]}</h2>
               </div>
               <div className={styles.cardBody}>
-                <StepFields step={step} formData={formData} onChange={onChange} />
+                <StepFields
+                  step={step}
+                  formData={formData}
+                  onChange={onChange}
+                  errors={errors}
+                />
               </div>
               <div className={styles.cardActions}>
                 <button onClick={prev} className={styles.btnBack} aria-label="Voltar">
@@ -377,17 +429,11 @@ export default function BudgetPage() {
                   Voltar
                 </button>
                 {step < TOTAL_STEPS ? (
-                  <button onClick={next} className={styles.btnNext}
-                    disabled={
-                      (step === 1 && !formData.name) ||
-                      (step === 2 && !formData.email) ||
-                      (step === 3 && !formData.phone) ||
-                      (step === 4 && !formData.address) ||
-                      (step === 5 && !formData.poolSize) ||
-                      (step === 6 && formData.services.length === 0) ||
-                      (step === 7 && !formData.frequency) ||
-                      (step === 8 && !formData.poolStatus)
-                    }>
+                  <button
+                    onClick={next}
+                    className={`${styles.btnNext} ${!isStepValid() ? styles.btnDisabled : ''}`}
+                    disabled={!isStepValid()}
+                  >
                     Continuar <ArrowRight size={18} />
                   </button>
                 ) : (
@@ -401,7 +447,6 @@ export default function BudgetPage() {
         </div>
       )}
 
-      {/* ── done ── */}
       {step === TOTAL_STEPS + 1 && (
         <div className={`${styles.done} ${showDone ? styles.doneAppear : ''}`}>
           <div className={`${styles.doneCard} ${visible ? styles.doneCardIn : styles.doneCardOut}`}>
@@ -440,10 +485,6 @@ export default function BudgetPage() {
                 <MessageCircle size={20} />
                 Enviar por WhatsApp
               </button>
-              <button className={styles.btnDownload}>
-                <Download size={18} />
-                Descarregar orçamento
-              </button>
               <button className={styles.btnReset} onClick={reset}>
                 <RefreshCw size={18} />
                 Fazer novo orçamento
@@ -457,31 +498,59 @@ export default function BudgetPage() {
 }
 
 /* ─── Step fields ─── */
-function StepFields({ step, formData, onChange }) {
+function StepFields({ step, formData, onChange, errors }) {
+  const getError = (field) => errors && errors[field];
+
   switch (step) {
     case 1: return (
-      <Field label="Como podemos chamá-lo?">
-        <input name="name" value={formData.name} onChange={onChange} placeholder="Ex: João Silva" className="f-input" />
-      </Field>
+      <>
+        <Field label="Como podemos chamá-lo?" error={getError("name")}>
+          <input
+            name="name"
+            value={formData.name}
+            onChange={onChange}
+            placeholder="Ex: João Silva"
+            className={`f-input ${getError("name") ? "f-input-error" : ""}`}
+          />
+        </Field>
+        <Field label="Qual o seu email?" error={getError("email")}>
+          <input
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={onChange}
+            placeholder="exemplo@email.com"
+            className={`f-input ${getError("email") ? "f-input-error" : ""}`}
+          />
+        </Field>
+      </>
     );
     case 2: return (
-      <Field label="Qual o seu email?">
-        <input name="email" type="email" value={formData.email} onChange={onChange} placeholder="exemplo@email.com" className="f-input" />
+      <Field label="Telefone ou WhatsApp" error={getError("phone")}>
+        <input
+          name="phone"
+          type="tel"
+          value={formData.phone}
+          onChange={onChange}
+          placeholder="+351 900 000 000"
+          className={`f-input ${getError("phone") ? "f-input-error" : ""}`}
+        />
       </Field>
     );
     case 3: return (
-      <Field label="Telefone ou WhatsApp">
-        <input name="phone" type="tel" value={formData.phone} onChange={onChange} placeholder="+351 900 000 000" className="f-input" />
+      <Field label="Morada da piscina" error={getError("address")}>
+        <input
+          name="address"
+          value={formData.address}
+          onChange={onChange}
+          placeholder="Ex: Rua das Flores, 123, Mafra"
+          className={`f-input ${getError("address") ? "f-input-error" : ""}`}
+        />
       </Field>
     );
     case 4: return (
-      <Field label="Morada da piscina">
-        <input name="address" value={formData.address} onChange={onChange} placeholder="Ex: Rua das Flores, 123, Mafra" className="f-input" />
-      </Field>
-    );
-    case 5: return (
-      <Field label="Qual o tamanho da piscina?">
-        <RadioGroup
+      <Field label="Qual o tamanho da piscina?" error={getError("poolSize")}>
+        <RadioList
           name="poolSize"
           value={formData.poolSize}
           onChange={onChange}
@@ -491,12 +560,13 @@ function StepFields({ step, formData, onChange }) {
             { value: "Grande (31m² a 60m²)", label: "Grande (31m² a 60m²)", icon: Bath },
             { value: "Muito grande (acima de 60m²)", label: "Muito grande (acima de 60m²)", icon: Bath },
           ]}
+          error={getError("poolSize")}
         />
       </Field>
     );
-    case 6: return (
-      <Field label="Que serviços precisa? (pode escolher vários)">
-        <CheckboxGroup
+    case 5: return (
+      <Field label="Que serviços precisa? (pode escolher vários)" error={getError("services")}>
+        <CheckboxList
           name="services"
           value={formData.services}
           onChange={onChange}
@@ -510,12 +580,13 @@ function StepFields({ step, formData, onChange }) {
             { value: "Limpeza de filtros e skimmers", label: "Limpeza de filtros e skimmers", icon: Bath },
             { value: "Outros", label: "Outros", icon: FileText },
           ]}
+          error={getError("services")}
         />
       </Field>
     );
-    case 7: return (
-      <Field label="Com que frequência pretende limpar?">
-        <RadioGroup
+    case 6: return (
+      <Field label="Com que frequência pretende limpar?" error={getError("frequency")}>
+        <RadioList
           name="frequency"
           value={formData.frequency}
           onChange={onChange}
@@ -526,13 +597,14 @@ function StepFields({ step, formData, onChange }) {
             { value: "Pontual / Esporádico", label: "Pontual / Esporádico", icon: Clock },
             { value: "Outra", label: "Outra", icon: Clock },
           ]}
+          error={getError("frequency")}
         />
       </Field>
     );
-    case 8: return (
+    case 7: return (
       <>
-        <Field label="Como está a piscina atualmente?">
-          <RadioGroup
+        <Field label="Como está a piscina atualmente?" error={getError("poolStatus")}>
+          <RadioList
             name="poolStatus"
             value={formData.poolStatus}
             onChange={onChange}
@@ -542,10 +614,11 @@ function StepFields({ step, formData, onChange }) {
               { value: "Água verde / turva", label: "Água verde / turva", icon: Cloud },
               { value: "Não tenho a certeza", label: "Não tenho a certeza", icon: HelpCircle },
             ]}
+            error={getError("poolStatus")}
           />
         </Field>
         <Field label="A piscina utiliza que sistema?">
-          <RadioGroup
+          <RadioList
             name="system"
             value={formData.system}
             onChange={onChange}
@@ -562,27 +635,32 @@ function StepFields({ step, formData, onChange }) {
   }
 }
 
-function Field({ label, hint, children }) {
+function Field({ label, hint, children, error }) {
   return (
     <div className={styles.fieldGroup}>
-      <label className={styles.fieldLabel}>{label}</label>
+      <label className={`${styles.fieldLabel} ${error ? styles.fieldLabelError : ""}`}>{label}</label>
       {children}
       {hint && <p className={styles.fieldHint}>{hint}</p>}
+      {error && <p className={styles.fieldError}>{error}</p>}
     </div>
   );
 }
 
-function RadioGroup({ name, value, onChange, options }) {
+// Radio List - versão em lista vertical
+function RadioList({ name, value, onChange, options, error }) {
   return (
-    <div className={styles.radioGroup}>
+    <div className={`${styles.radioList} ${error ? styles.radioListError : ""}`}>
       {options.map((opt) => {
         const Icon = opt.icon;
+        const isSelected = value === opt.value;
         return (
-          <label key={opt.value} className={`${styles.radioLabel} ${value === opt.value ? styles.radioActive : ''}`}>
-            <input type="radio" name={name} value={opt.value} checked={value === opt.value} onChange={onChange} />
-            {value === opt.value && <Check size={14} strokeWidth={3} />}
-            {Icon && <Icon size={16} className={styles.optionIcon} />}
-            {opt.label}
+          <label key={opt.value} className={`${styles.radioListItem} ${isSelected ? styles.radioListItemActive : ''}`}>
+            <input type="radio" name={name} value={opt.value} checked={isSelected} onChange={onChange} />
+            <span className={styles.radioIndicator}>
+              {isSelected ? <CircleDot size={20} /> : <Circle size={20} />}
+            </span>
+            {Icon && <Icon size={18} className={styles.optionIcon} />}
+            <span className={styles.radioLabelText}>{opt.label}</span>
           </label>
         );
       })}
@@ -590,17 +668,21 @@ function RadioGroup({ name, value, onChange, options }) {
   );
 }
 
-function CheckboxGroup({ name, value, onChange, options }) {
+// Checkbox List - versão em lista vertical
+function CheckboxList({ name, value, onChange, options, error }) {
   return (
-    <div className={styles.checkboxGroup}>
+    <div className={`${styles.checkboxList} ${error ? styles.checkboxListError : ""}`}>
       {options.map((opt) => {
         const Icon = opt.icon;
+        const isChecked = value.includes(opt.value);
         return (
-          <label key={opt.value} className={`${styles.checkboxLabel} ${value.includes(opt.value) ? styles.checkboxActive : ''}`}>
-            <input type="checkbox" name={name} value={opt.value} checked={value.includes(opt.value)} onChange={onChange} />
-            {value.includes(opt.value) && <Check size={14} strokeWidth={3} />}
-            {Icon && <Icon size={16} className={styles.optionIcon} />}
-            {opt.label}
+          <label key={opt.value} className={`${styles.checkboxListItem} ${isChecked ? styles.checkboxListItemActive : ''}`}>
+            <input type="checkbox" name={name} value={opt.value} checked={isChecked} onChange={onChange} />
+            <span className={styles.checkboxIndicator}>
+              {isChecked ? <CheckSquare size={20} /> : <Square size={20} />}
+            </span>
+            {Icon && <Icon size={18} className={styles.optionIcon} />}
+            <span className={styles.checkboxLabelText}>{opt.label}</span>
           </label>
         );
       })}

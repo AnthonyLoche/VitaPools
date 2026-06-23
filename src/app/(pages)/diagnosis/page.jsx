@@ -9,9 +9,6 @@ import {
   CheckCircle,
   HelpCircle,
   Waves,
-  TrendingUp,
-  TrendingDown,
-  Minus,
   ArrowRight,
   RefreshCw,
   Phone,
@@ -52,6 +49,10 @@ const DiagnosisPage = () => {
       icon: <HelpCircle size={20} />,
     },
   ];
+
+  // Dividir em duas colunas para evitar espaço vazio
+  const problemasCol1 = problemas.slice(0, 3);
+  const problemasCol2 = problemas.slice(3, 6);
 
   const duracaoOptions = [
     { id: "recente", label: "Apareceu há poucos dias" },
@@ -163,6 +164,7 @@ const DiagnosisPage = () => {
       duracaoTexto,
       freqTexto,
       score,
+      problema: p.label,
     };
   };
 
@@ -242,6 +244,24 @@ const DiagnosisPage = () => {
 
   const result = getMedicoResult();
 
+  // Gerar mensagem para WhatsApp
+  const generateWhatsAppMessage = () => {
+    if (!result) return "";
+    const message = `*🟦 Diagnóstico - VitaPools*%0A%0A` +
+      `*Problema:* ${result.problema}%0A` +
+      `*Urgência:* ${result.urgencyLabel}%0A` +
+      `*Tempo estimado:* ${result.tempoRecuperacao}%0A` +
+      `*Causa provável:* ${result.causa}%0A` +
+      `*Situação:* O problema ${result.duracaoTexto}, e ${result.freqTexto}.%0A%0A` +
+      `Gostaria de agendar uma avaliação profissional.`;
+    return message;
+  };
+
+  const handleWhatsApp = () => {
+    const message = generateWhatsAppMessage();
+    window.open(`https://wa.me/351932096025?text=${message}`, "_blank");
+  };
+
   return (
     <>
       <HeaderMain />
@@ -293,16 +313,30 @@ const DiagnosisPage = () => {
                     Escolha a opção que descreve melhor o que está a ver.
                   </p>
                   <div className={styles.medicoOptions}>
-                    {problemas.map((p) => (
-                      <button
-                        key={p.id}
-                        className={styles.medicoOpt}
-                        onClick={() => handleMedicoChoose("problema", p.id)}
-                      >
-                        <span className={styles.medicoOptIcon}>{p.icon}</span>
-                        {p.label}
-                      </button>
-                    ))}
+                    <div className={styles.medicoOptionsCol}>
+                      {problemasCol1.map((p) => (
+                        <button
+                          key={p.id}
+                          className={styles.medicoOpt}
+                          onClick={() => handleMedicoChoose("problema", p.id)}
+                        >
+                          <span className={styles.medicoOptIcon}>{p.icon}</span>
+                          {p.label}
+                        </button>
+                      ))}
+                    </div>
+                    <div className={styles.medicoOptionsCol}>
+                      {problemasCol2.map((p) => (
+                        <button
+                          key={p.id}
+                          className={styles.medicoOpt}
+                          onClick={() => handleMedicoChoose("problema", p.id)}
+                        >
+                          <span className={styles.medicoOptIcon}>{p.icon}</span>
+                          {p.label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
               )}
@@ -374,7 +408,7 @@ const DiagnosisPage = () => {
                     {result.urgencyLabel}
                   </div>
                   <h3 className={styles.medicoResultTitle}>
-                    Diagnóstico: {problemaInfo[medicoState.problema]?.label}
+                    Diagnóstico: {result.problema}
                   </h3>
                   <div className={styles.medicoResultDetail}>
                     <p>
@@ -395,16 +429,24 @@ const DiagnosisPage = () => {
                       tratar com precisão.
                     </p>
                   </div>
-                  <a href="/contato" className={styles.medicoCta}>
-                    Receber uma avaliação profissional da VitaPools →
-                  </a>
-                  <button
-                    className={styles.medicoRestart}
-                    onClick={handleMedicoRestart}
-                  >
-                    <RefreshCw size={16} />
-                    Refazer o diagnóstico
-                  </button>
+                  <div className={styles.medicoActions}>
+                    <button
+                      onClick={handleWhatsApp}
+                      className={styles.medicoWhatsApp}
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.6 6.3A8.86 8.86 0 0 0 12.1 4a8.83 8.83 0 0 0-7.7 13.2L3 21l3.9-1a8.84 8.84 0 0 0 5.2 1.7h0a8.83 8.83 0 0 0 8.8-8.8 8.7 8.7 0 0 0-3.3-6.6Zm-5.5 13.5h0a7.3 7.3 0 0 1-3.8-1l-.3-.2-2.9.7.7-2.8-.2-.3a7.4 7.4 0 0 1 6.5-11.2 7.3 7.3 0 0 1 7.3 7.4 7.3 7.3 0 0 1-7.3 7.4Zm4-5.5c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1l-.6.8c-.1.2-.3.2-.5.1a6 6 0 0 1-2.9-2.5c-.2-.3 0-.4.1-.6l.4-.5c.1-.2.1-.3 0-.5l-.6-1.4c-.2-.4-.3-.3-.5-.3h-.5c-.2 0-.5.1-.6.3-.2.2-.7.7-.7 1.7s.7 2 .8 2.1c.1.2 1.7 2.6 4.1 3.6 2 .8 2 .6 2.4.6.4 0 1.3-.5 1.4-1 .2-.5.2-.9.1-1Z"/>
+                      </svg>
+                      Receber avaliação profissional
+                    </button>
+                    <button
+                      className={styles.medicoRestart}
+                      onClick={handleMedicoRestart}
+                    >
+                      <RefreshCw size={16} />
+                      Refazer diagnóstico
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
@@ -485,11 +527,11 @@ const DiagnosisPage = () => {
                 <div className={styles.contactItems}>
                   <div className={styles.contactItem}>
                     <Phone size={18} />
-                    <span>+351 900 000 000</span>
+                    <span>+351 932 096 025</span>
                   </div>
                   <div className={styles.contactItem}>
                     <Mail size={18} />
-                    <span>info@vitapools.pt</span>
+                    <span>Vitapoolsmanutencao@gmail.com</span>
                   </div>
                   <div className={styles.contactItem}>
                     <MapPin size={18} />
