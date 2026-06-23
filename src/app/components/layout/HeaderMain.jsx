@@ -38,6 +38,7 @@ const HeaderMain = () => {
     { href: "/", label: "Início" },
     { href: "/services", label: "Serviços" },
     { href: "/diagnosis", label: "Fazer Diagnóstico" },
+    { href: "/gallery", label: "Galeria" },
   ];
 
   return (

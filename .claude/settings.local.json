@@ -1,7 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(for f:*)",
+      "Bash(do mv:*)",
+      "Bash(done)",
+      "Bash(mv img*.jpg src/assets/images/gallery/)",
+      "Bash(mv video*.mp4 src/assets/images/gallery/)",
+      "Bash(do echo:*)"
     ]
   }
 }

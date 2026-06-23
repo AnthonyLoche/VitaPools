@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import {
   User, Ruler, Calendar, Home, Droplets,
   Check, ArrowRight, ArrowLeft, Send, Mail, Phone, FileText,
@@ -24,6 +25,7 @@ import {
   Square,
 } from "lucide-react";
 import styles from "@/assets/css/budget/main.module.css";
+import logo from "@/assets/images/logo_h_removed_white.png";
 
 const TOTAL_STEPS = 7;
 
@@ -376,8 +378,8 @@ export default function BudgetPage() {
       {step === 0 && (
         <div className={`${styles.intro} ${visible ? styles.in : styles.out}`}>
           <div className={styles.introContent}>
-            <img alt="VitaPools" className={styles.introLogo}
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCclMZ1pAIPYRW9r8a-9p4K8UfxWdyCstlnx2XZhnGDNvAdfoDD8MA7chg3aFlB6JTNz8XzHPedQiOACDQbIblyDrr7_XEUj_3ZGQnquqJISNN_nXJdmmhp_dDupUSLU_OCw2cREpuKHpwfVV--uqSLpTCJdas5ZchKMHMGWhx38EJQhqiJMqMABQM1uuVNeBFdxy7xidqdMEH2ptce2Wyo0g-iWN0zZOz2t4X4Z-LRRxriu0CP1Pm13ljCvOAMFzYcGvPMteFHWw"
+            <Image alt="VitaPools" className={styles.introLogo}
+              src={logo}
             />
             <p className={styles.introPre}>VitaPools</p>
             <h1 className={styles.introTitle}>Vamos fazer um orçamento<br />à sua medida</h1>
