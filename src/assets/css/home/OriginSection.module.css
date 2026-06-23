@@ -1,0 +1,184 @@
+/* ============================================
+   ORIGIN SECTION - "Porque faço isto?"
+   ============================================ */
+.origin {
+  padding: 80px 0;
+  background: #ffffff;
+  position: relative;
+}
+
+.container {
+  width: 85%;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ============================================
+   GRID
+   ============================================ */
+.grid {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 64px;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+/* ============================================
+   IMAGE - CENTRALIZADA
+   ============================================ */
+.imageWrapper {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  aspect-ratio: 4/5;
+  background: #000080;
+  box-shadow: 0 24px 60px -24px rgba(0, 0, 128, 0.3);
+  /* Remove height: 70% */
+}
+
+.image {
+  object-fit: cover;
+  object-position: center; /* Centraliza a imagem */
+  transition: transform 0.5s ease;
+}
+
+.imageWrapper:hover .image {
+  transform: scale(1.03);
+}
+
+@media (max-width: 900px) {
+  .imageWrapper {
+    aspect-ratio: 4/3;
+    max-height: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .imageWrapper {
+    aspect-ratio: 4/3;
+    max-height: 280px;
+    border-radius: 16px;
+  }
+}
+
+/* ============================================
+   CONTENT
+   ============================================ */
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0062a1;
+  font-weight: 700;
+}
+
+/* ============================================
+   QUOTE
+   ============================================ */
+.quote {
+  position: relative;
+  padding-left: 28px;
+  border-left: 3px solid #0062a1;
+}
+
+.quoteText {
+  font-family: "Hanken Grotesk", serif;
+  font-size: 1.32rem;
+  font-weight: 400;
+  font-style: italic;
+  color: #000080;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.quoteBody {
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #3a4750;
+  line-height: 1.7;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .quote {
+    padding-left: 20px;
+  }
+
+  .quoteText {
+    font-size: 1.1rem;
+  }
+
+  .quoteBody {
+    font-size: 0.95rem;
+  }
+}
+
+/* ============================================
+   SIGNATURE
+   ============================================ */
+.signature {
+  font-family: "Inter", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #7c8a92;
+  margin-top: 4px;
+}
+
+/* ============================================
+   RESPONSIVIDADE
+   ============================================ */
+@media (max-width: 768px) {
+  .origin {
+    padding: 60px 0;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  .badge {
+    font-size: 0.7rem;
+  }
+
+  .signature {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .origin {
+    padding: 40px 0;
+  }
+
+  .grid {
+    gap: 28px;
+  }
+
+  .quoteText {
+    font-size: 1rem;
+  }
+
+  .quoteBody {
+    font-size: 0.9rem;
+  }
+
+  .quote {
+    padding-left: 16px;
+    border-left-width: 2px;
+  }
+}

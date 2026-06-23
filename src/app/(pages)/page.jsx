@@ -9,6 +9,7 @@ import {
   FooterMain,
   CTASection,
   BeforeAfter,
+  OriginSection,
 } from "../components";
 
 export default function Home() {
@@ -33,6 +34,10 @@ export default function Home() {
       <Reveal>
         <CTASection />
       </Reveal>
+      <Reveal>
+        <OriginSection />
+      </Reveal>
+
       <Reveal>
         <FAQSection />
       </Reveal>
