@@ -8,6 +8,7 @@ import {
   FAQSection,
   FooterMain,
   CTASection,
+  BeforeAfter,
 } from "../components";
 
 export default function Home() {
@@ -25,6 +26,9 @@ export default function Home() {
       </Reveal>
       <Reveal>
         <ProcessSection />
+      </Reveal>
+      <Reveal>
+        <BeforeAfter />
       </Reveal>
       <Reveal>
         <CTASection />
