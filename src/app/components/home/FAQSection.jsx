@@ -1,11 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ChevronDown } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "@/assets/css/home/FAQSection.module.css";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 const FAQSection = () => {
   const [openIndex, setOpenIndex] = useState(0);
+  const sectionRef = useRef(null);
+  const titleRef = useRef(null);
+  const itemRefs = useRef([]);
 
   const faqs = [
     {
@@ -26,14 +35,154 @@ const FAQSection = () => {
     setOpenIndex(openIndex === index ? -1 : index);
   };
 
+  useEffect(() => {
+    const items = itemRefs.current;
+    const isMobile = window.innerWidth < 768;
+
+    // --- TÍTULO ---
+    gsap.fromTo(
+      titleRef.current,
+      { opacity: 0, y: 40 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.9,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      }
+    );
+
+    // --- FAQ ITEMS ---
+    items.forEach((item, index) => {
+      // Cada item entra de forma diferente
+      const fromX = isMobile ? (index % 2 === 0 ? -40 : 40) : 0;
+      const fromY = isMobile ? 0 : (index % 2 === 0 ? -30 : 30);
+      const rotation = isMobile ? (index % 2 === 0 ? -3 : 3) : 0;
+
+      gsap.fromTo(
+        item,
+        {
+          opacity: 0,
+          x: fromX,
+          y: fromY,
+          rotation: rotation,
+        },
+        {
+          opacity: 1,
+          x: 0,
+          y: 0,
+          rotation: 0,
+          duration: 0.7,
+          delay: index * 0.15 + 0.1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+
+      // --- QUESTION (botão) dentro do item ---
+      const questionBtn = item.querySelector(`.${styles.question}`);
+      if (questionBtn) {
+        gsap.fromTo(
+          questionBtn,
+          { opacity: 0, y: 15 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            delay: index * 0.15 + 0.3,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 80%",
+              toggleActions: "play none none none",
+            },
+          }
+        );
+      }
+
+      // --- ÍCONE (Chevron) ---
+      const icon = item.querySelector(`.${styles.icon}`);
+      if (icon) {
+        gsap.fromTo(
+          icon,
+          { opacity: 0, scale: 0.5, rotation: -90 },
+          {
+            opacity: 1,
+            scale: 1,
+            rotation: 0,
+            duration: 0.5,
+            delay: index * 0.15 + 0.35,
+            ease: "back.out(1.4)",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 80%",
+              toggleActions: "play none none none",
+            },
+          }
+        );
+      }
+
+      // --- ANSWER (texto da resposta) ---
+      const answer = item.querySelector(`.${styles.answer}`);
+      if (answer) {
+        // A resposta já está com max-height 0, mas queremos que o texto dentro apareça com fade
+        const answerText = answer.querySelector(`.${styles.answerText}`);
+        if (answerText) {
+          gsap.fromTo(
+            answerText,
+            { opacity: 0, y: 10 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.4,
+              delay: index * 0.15 + 0.4,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: "top 80%",
+                toggleActions: "play none none none",
+              },
+            }
+          );
+        }
+      }
+    });
+
+    // --- ATUALIZAR EM RESIZE ---
+    const handleResize = () => {
+      ScrollTrigger.refresh();
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      ScrollTrigger.getAll().forEach(st => st.kill());
+    };
+  }, []);
+
   return (
-    <section className={styles.faq}>
+    <section ref={sectionRef} className={styles.faq}>
       <div className={styles.container}>
-        <h2 className={styles.title}>Perguntas Frequentes</h2>
+        <h2 ref={titleRef} className={styles.title}>
+          Perguntas Frequentes
+        </h2>
 
         <div className={styles.list}>
           {faqs.map((faq, index) => (
-            <div key={index} className={styles.item}>
+            <div
+              key={index}
+              ref={(el) => (itemRefs.current[index] = el)}
+              className={styles.item}
+            >
               <button
                 className={styles.question}
                 onClick={() => toggleFAQ(index)}

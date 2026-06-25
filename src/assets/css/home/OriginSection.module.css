@@ -5,6 +5,7 @@
   padding: 80px 0;
   background: #ffffff;
   position: relative;
+  overflow: hidden;
 }
 
 .container {
@@ -40,12 +41,13 @@
   aspect-ratio: 4/5;
   background: #000080;
   box-shadow: 0 24px 60px -24px rgba(0, 0, 128, 0.3);
-  /* Remove height: 70% */
+  opacity: 0; /* Inicia invisível para animação */
+  transform-origin: center center;
 }
 
 .image {
   object-fit: cover;
-  object-position: center; /* Centraliza a imagem */
+  object-position: center;
   transition: transform 0.5s ease;
 }
 
@@ -84,6 +86,7 @@
   text-transform: uppercase;
   color: #0062a1;
   font-weight: 700;
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 /* ============================================
@@ -93,6 +96,7 @@
   position: relative;
   padding-left: 28px;
   border-left: 3px solid #0062a1;
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 .quoteText {
@@ -103,6 +107,7 @@
   color: #000080;
   line-height: 1.5;
   margin-bottom: 20px;
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 .quoteBody {
@@ -112,6 +117,7 @@
   color: #3a4750;
   line-height: 1.7;
   margin: 0;
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 @media (max-width: 600px) {
@@ -137,6 +143,7 @@
   font-weight: 600;
   color: #7c8a92;
   margin-top: 4px;
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 /* ============================================

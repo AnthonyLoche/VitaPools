@@ -1,299 +1,579 @@
-/* ============================================
-   HERO SECTION
-   ============================================ */
-.hero {
-  position: relative;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  padding-top: 80px;
-  overflow: hidden;
+/* ============================================================
+   VITAPOOLS — HERO CINEMATOGRÁFICO PREMIUM
+   HeroMain.module.css
+   ============================================================ */
+
+/* ── CUSTOM PROPERTIES ─────────────────────────────────────── */
+:root {
+  --hero-aqua:   #000080;
+  --hero-gold:   #E8C070;
+  --hero-navy:   #050B18;
+  --hero-white:  #F0EDE6;
+  --hero-muted:  rgba(240, 237, 230, 0.65);
+  --hero-font-display: "Hanken Grotesk", "DM Sans", sans-serif;
+  --hero-font-body:    "Inter", sans-serif;
+  --transition-main: 0.75s;
 }
 
-/* ============================================
-   BACKGROUND
-   ============================================ */
-.heroBackground {
+/* ── SECTION ────────────────────────────────────────────────── */
+.hero {
+  position: fixed;            /* stays fullscreen while active */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--hero-navy);
+  /* The parent page must add height: 500vh + scroll-snap to
+     keep the hero pinned. This mirrors GSAP's pin behaviour
+     without ScrollTrigger. */
+}
+
+/* ── VIDEO BACKGROUND ───────────────────────────────────────── */
+.heroBg {
   position: absolute;
   inset: 0;
   z-index: 0;
-  overflow: hidden;
   pointer-events: none;
+  overflow: hidden;
+}
+
+.heroVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: center center;
+  will-change: transform, filter;
+  /* GSAP animates scale, xPercent, yPercent, filter */
 }
 
 .heroOverlay {
   position: absolute;
   inset: 0;
-  z-index: 10;
   background: linear-gradient(
-    to bottom,
-    rgba(0, 98, 161, 0.1) 0%,
-    transparent 40%,
-    rgba(247, 249, 252, 0.7) 70%,
-    rgba(247, 249, 252, 0.95) 85%,
-    rgba(247, 249, 252, 1) 100%
+    160deg,
+    rgba(5, 11, 24, 0.3) 0%,
+    rgba(5, 11, 24, 0.55) 40%,
+    rgba(5, 11, 24, 0.75) 100%
   );
+  /* opacity animated by GSAP per scene */
 }
 
+/* Subtle edge vignette — cinematic letterbox feel */
+.vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 50%, transparent 40%, rgba(5, 11, 24, 0.55) 100%);
+  pointer-events: none;
+}
+
+/* ── SCENE BASE ─────────────────────────────────────────────── */
+.scene {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;             /* toggled between flex/none by GSAP */
+  align-items: center;
+  padding: 0;
+  pointer-events: none;
+  will-change: transform, opacity, filter;
+}
+
+.scene a,
+.scene button:not(.progressDot) {
+  pointer-events: auto;
+}
+
+.sceneInner {
+  width: 100%;
+  max-width: 18 40px;
+  margin: 0 auto;
+  padding: 0 clamp(24px, 6vw, 100px);
+}
+
+.sceneInnerCenter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.sceneInnerSplit {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(40px, 6vw, 100px);
+}
+
+/* ── EYEBROW / BADGE ────────────────────────────────────────── */
+.eyebrow {
+  display: inline-block;
+  font-family: var(--hero-font-body);
+  font-size: clamp(11px, 1.1vw, 14px);
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--hero-aqua);
+  margin-bottom: clamp(16px, 2.5vw, 28px);
+}
+
+/* ── SCENE INDEX (01 / 02 / 03) ─────────────────────────────── */
+.sceneIndex {
+  font-family: var(--hero-font-body);
+  font-size: clamp(10px, 1vw, 13px);
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--hero-aqua);
+  opacity: 0.8;
+  margin-bottom: clamp(12px, 2vw, 24px);
+}
+
+/* ── DISPLAY TITLE — the hero of every scene ────────────────── */
+.displayTitle {
+  font-family: var(--hero-font-display);
+  font-size: clamp(4.5rem, 9.5vw, 11rem);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  color: var(--hero-white);
+  margin: 0 0 clamp(20px, 3vw, 40px) 0;
+  text-shadow: 0 4px 40px rgba(5, 11, 24, 0.4);
+}
+
+/* Italic = aqua accent */
+.displayTitle em {
+  font-style: italic;
+  color: var(--hero-aqua);
+  font-weight: 800;
+}
+
+.displayTitleLeft   { text-align: left; }
+.displayTitleRight  { text-align: right; }
+.displayTitleCenter { text-align: center; }
+
+/* Scene 4 text is slightly smaller to fit the split grid */
+.displayTitleMd {
+  font-size: clamp(3.5rem, 7vw, 8.5rem);
+}
+
+/* ── LEAD PARAGRAPH ─────────────────────────────────────────── */
+.lead {
+  font-family: var(--hero-font-body);
+  font-size: clamp(15px, 1.5vw, 20px);
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--hero-muted);
+  max-width: 540px;
+  margin: 0 0 clamp(28px, 4vw, 48px) 0;
+}
+
+.leadRight {
+  text-align: right;
+  margin-left: auto;
+  margin-right: 0;
+}
+
+/* ── BUTTON ROW ─────────────────────────────────────────────── */
+.buttonRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+}
+
+.buttonRowCenter {
+  justify-content: center;
+}
+
+/* ── IMAGE BACKGROUND ───────────────────────────────────────── */
 .heroImage {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  will-change: transform, opacity;
+  transition: opacity 0.8s ease;
+  pointer-events: none;
+  z-index: 1;
 }
-
-/* ============================================
-   CONTENT
-   ============================================ */
-.heroContent {
-  position: relative;
-  z-index: 20;
+.heroVideo {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  padding: 0 24px;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: center center;
+  will-change: transform, filter;
+  z-index: 1;
 }
 
-.heroContainer {
-  margin: 0 auto;
-  width: 85%;
+.heroOverlay {
+  z-index: 2;
 }
 
-.heroText {
-  max-width: 672px;
+.vignette {
+  z-index: 3;
 }
 
-/* ============================================
-   BADGE
-   ============================================ */
-.heroBadge {
-  display: block;
-  color: #000080;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  font-size: 14px;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
-
-/* ============================================
-   TITLE
-   ============================================ */
-.heroTitle {
-  font-family: "Hanken Grotesk", sans-serif;
-  font-size: 64px;
-  font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -0.04em;
+/* Primary — aqua fill */
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--hero-aqua);
   color: #fff;
-  margin-bottom: 24px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-/* ============================================
-   DESCRIPTION
-   ============================================ */
-.heroDescription {
-  font-family: "Inter", sans-serif;
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 1.6;
-  color: #191c1e;
-  margin-bottom: 32px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  max-width: 600px;
-}
-
-/* ============================================
-   BUTTONS
-   ============================================ */
-.heroButtons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 40px;
-}
-
-.primaryButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--color-primary);
-  color: var(--color-on-primary);
-  padding: 16px 32px;
-  border-radius: 12px;
-  font-family: "Hanken Grotesk", sans-serif;
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 1.3;
+  padding: clamp(12px, 1.5vw, 18px) clamp(24px, 3vw, 40px);
+  border-radius: 100px;            /* fully rounded — premium feel */
+  font-family: var(--hero-font-display);
+  font-size: clamp(14px, 1.3vw, 18px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
   text-decoration: none;
-  transition: all 0.2s ease;
-  border: none;
-  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  box-shadow: 0 0 0 0 rgba(0, 212, 200, 0);
 }
 
-.primaryButton:hover {
-  box-shadow:
-    0 20px 25px -5px rgba(0, 0, 0, 0.1),
-    0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  transform: translateY(-2px);
+.btnPrimary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0, 212, 200, 0.35);
+  background: #1AE0D5;
 }
 
-.secondaryButton {
+/* Ghost — glass border */
+.btnGhost {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(240, 237, 230, 0.08);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(0, 98, 161, 0.2);
-  padding: 16px 32px;
-  border-radius: 12px;
-  font-family: "Hanken Grotesk", sans-serif;
-  font-size: 24px;
+  border: 1px solid rgba(240, 237, 230, 0.22);
+  color: var(--hero-white);
+  padding: clamp(12px, 1.5vw, 18px) clamp(24px, 3vw, 40px);
+  border-radius: 100px;
+  font-family: var(--hero-font-display);
+  font-size: clamp(14px, 1.3vw, 18px);
   font-weight: 600;
-  line-height: 1.3;
-  color: #191c1e;
+  letter-spacing: -0.01em;
   text-decoration: none;
-  transition: all 0.2s ease;
-  box-shadow: 0 20px 40px rgba(4, 27, 45, 0.05);
-  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 
-.secondaryButton:hover {
-  background: rgba(255, 255, 255, 0.6);
-  transform: translateY(-2px);
+.btnGhost:hover {
+  transform: translateY(-3px);
+  background: rgba(240, 237, 230, 0.14);
+  border-color: rgba(240, 237, 230, 0.4);
 }
 
-/* ============================================
-   FEATURES
-   ============================================ */
-.heroFeatures {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-}
-
-@media (min-width: 768px) {
-  .heroFeatures {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-.featureItem {
+/* ── PILL ROW (Scene 3) ─────────────────────────────────────── */
+.pillRow {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.pill {
+  display: inline-flex;
   align-items: center;
+  gap: 10px;
+  background: rgba(240, 237, 230, 0.07);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(240, 237, 230, 0.15);
+  padding: 14px 26px;
+  border-radius: 100px;
+  font-family: var(--hero-font-display);
+  font-size: clamp(13px, 1.1vw, 16px);
+  font-weight: 600;
+  color: var(--hero-white);
+  animation: float 6s ease-in-out infinite;
+}
+
+.pill:nth-child(2) { animation-delay: -2s; }
+.pill:nth-child(3) { animation-delay: -4s; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0);    }
+  50%       { transform: translateY(-8px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill { animation: none; }
+}
+
+.pillCheck {
+  color: var(--hero-aqua);
+  font-weight: 800;
+  font-size: 1.1em;
+}
+
+/* ── STAT CARDS (Scene 4) ───────────────────────────────────── */
+.splitLeft  {}
+.splitRight {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.statCard {
+  background: rgba(240, 237, 230, 0.06);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(240, 237, 230, 0.12);
+  border-radius: 20px;
+  padding: clamp(20px, 3vw, 36px) clamp(24px, 3.5vw, 44px);
+  display: flex;
+  flex-direction: column;
   gap: 8px;
-  color: #0062a1;
 }
 
-.featureIcon {
-  font-size: 24px;
-  font-weight: 700;
+.statNumber {
+  font-family: var(--hero-font-display);
+  font-size: clamp(3rem, 5.5vw, 6rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--hero-aqua);
   line-height: 1;
 }
 
-.featureText {
-  font-family: "Geist", sans-serif;
-  font-size: 12px;
+.statLabel {
+  font-family: var(--hero-font-body);
+  font-size: clamp(13px, 1.1vw, 16px);
+  font-weight: 400;
+  color: var(--hero-muted);
+  letter-spacing: 0.02em;
+}
+
+/* ── SCENE SPECIFIC POSITIONING ─────────────────────────────── */
+.scene1 { align-items: flex-end; padding-bottom: 10vh; }
+.scene2 { align-items: center; }
+.scene3 { align-items: center; }
+.scene4 { align-items: center; }
+.scene5 { align-items: center; }
+
+/* Scene 2: right-align layout */
+.scene2 .sceneInner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+/* ── PROGRESS INDICATOR ─────────────────────────────────────── */
+.progress {
+  position: absolute;
+  right: clamp(20px, 3vw, 44px);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.progressDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(240, 237, 230, 0.3);
+  cursor: pointer;
+  transition: background 0.35s ease, transform 0.35s ease, height 0.35s ease;
+  padding: 0;
+  outline: none;
+}
+
+.progressDot:focus-visible {
+  box-shadow: 0 0 0 3px rgba(0, 212, 200, 0.5);
+}
+
+.progressDotActive {
+  background: var(--hero-aqua);
+  height: 24px;
+  border-radius: 3px;
+  transform: scaleX(1.1);
+}
+
+/* ── SCROLL HINT ────────────────────────────────────────────── */
+.scrollHint {
+  position: absolute;
+  bottom: clamp(24px, 4vh, 48px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+}
+
+.scrollHintVisible {
+  opacity: 1;
+}
+
+.scrollHintText {
+  font-family: var(--hero-font-body);
+  font-size: 10px;
   font-weight: 500;
-  line-height: 1;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.35em;
   text-transform: uppercase;
+  color: rgba(240, 237, 230, 0.55);
 }
 
-/* ============================================
-   RESPONSIVIDADE
-   ============================================ */
+.scrollHintLine {
+  display: block;
+  width: 1px;
+  height: 36px;
+  background: linear-gradient(to bottom, rgba(0, 212, 200, 0.7), transparent);
+  animation: scrollPulse 2.2s ease-in-out infinite;
+}
 
-/* Tablets */
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.25; transform: scaleY(0.6); transform-origin: top; }
+  50%       { opacity: 1;    transform: scaleY(1);   transform-origin: top; }
+}
+
+/* ── ANIM CHILD — individual element reveal ─────────────────── */
+.animChild {
+  /* GSAP targets this class for staggered entrance */
+  will-change: transform, opacity, filter;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE — TABLET
+   ══════════════════════════════════════════════════════════════ */
 @media (max-width: 1024px) {
-  .heroTitle {
-    font-size: 48px;
+  .sceneInnerSplit {
+    grid-template-columns: 1fr;
   }
 
-  .primaryButton,
-  .secondaryButton {
-    font-size: 20px;
-    padding: 14px 28px;
+  .splitRight {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .statCard {
+    flex: 1 1 180px;
+  }
+
+  .scene4 {
+    align-items: flex-start;
+    padding-top: 15vh;
+  }
+
+  .scene4 .splitLeft .displayTitle {
+    text-align: center;
+  }
+
+  .scene4 .splitLeft {
+    text-align: center;
   }
 }
 
-/* Telemóveis grandes */
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE — MOBILE (≤768px)
+   ══════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
   .hero {
-    padding-top: 64px;
-    min-height: 90vh;
+    height: 100svh;
   }
 
-  .heroTitle {
-    font-size: 32px;
+  .scene1 {
+    align-items: center;
+    padding-bottom: 0;
   }
 
-  .heroDescription {
-    font-size: 16px;
+  .scene2 .sceneInner {
+    align-items: flex-start;
+    text-align: left;
   }
 
-  .primaryButton,
-  .secondaryButton {
-    font-size: 16px;
-    padding: 12px 24px;
-    border-radius: 8px;
+  .leadRight {
+    text-align: left;
+    margin-left: 0;
   }
 
-  .heroButtons {
+  .displayTitleRight {
+    text-align: left;
+  }
+
+  .displayTitle {
+    /* allow slightly larger relative size on small screens */
+    font-size: clamp(3.5rem, 15vw, 6rem);
+  }
+
+  .buttonRow {
     flex-direction: column;
     width: 100%;
   }
 
-  .primaryButton,
-  .secondaryButton {
+  .btnPrimary,
+  .btnGhost {
     width: 100%;
     justify-content: center;
   }
 
-  .heroFeatures {
-    grid-template-columns: 1fr;
-    gap: 12px;
+  .pillRow {
+    flex-direction: column;
+    align-items: center;
   }
 
-  .heroBadge {
-    font-size: 12px;
+  .pill {
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+  }
+
+  .statCard {
+    padding: 18px 22px;
+  }
+
+  .progress {
+    right: 14px;
+  }
+
+  .progressDotActive {
+    height: 20px;
   }
 }
 
-/* Telemóveis pequenos */
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE — SMALL MOBILE (≤480px)
+   ══════════════════════════════════════════════════════════════ */
 @media (max-width: 480px) {
-  .heroTitle {
-    font-size: 28px;
+  .displayTitle {
+    font-size: clamp(3rem, 17vw, 5rem);
+    line-height: 0.95;
   }
 
-  .heroContent {
-    padding: 0 16px;
+  .sceneInner {
+    padding: 0 20px;
   }
 
-  .primaryButton,
-  .secondaryButton {
-    font-size: 14px;
-    padding: 10px 20px;
-  }
-
-  .featureText {
+  .eyebrow {
     font-size: 10px;
   }
-}
 
-/* ============================================
-   CANVAS (para partículas/background animado)
-   ============================================ */
-.heroBackground canvas {
-  position: absolute !important;
-  inset: 0;
-  z-index: 5;
-}
+  .lead {
+    font-size: 14px;
+  }
 
-.heroOverlay {
-  z-index: 10;
-}
-
-.heroContent {
-  position: relative;
-  z-index: 20;
+  .btnPrimary,
+  .btnGhost {
+    font-size: 15px;
+    padding: 14px 24px;
+  }
 }

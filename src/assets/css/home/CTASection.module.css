@@ -26,6 +26,12 @@
 .backgroundOverlay {
   position: absolute;
   inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(247, 249, 252, 0.3) 0%,
+    rgba(247, 249, 252, 0.6) 50%,
+    rgba(247, 249, 252, 0.9) 100%
+  );
 }
 
 /* ============================================
@@ -53,6 +59,8 @@
   text-align: center;
   max-width: 1200px;
   margin: 0 auto;
+  opacity: 0; /* Inicia invisível para animação */
+  transform-origin: center center;
 }
 
 @media (min-width: 768px) {
@@ -72,6 +80,7 @@
   letter-spacing: -0.04em;
   color: #191c1e;
   margin-bottom: 24px;
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 @media (max-width: 1024px) {
@@ -103,6 +112,7 @@
   color: #3f4752;
   max-width: 672px;
   margin: 0 auto 40px;
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 @media (max-width: 768px) {
@@ -139,6 +149,8 @@
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
   cursor: pointer;
   border: none;
+  opacity: 0; /* Inicia invisível para animação */
+  transform-origin: center center;
 }
 
 .button:hover {
@@ -203,6 +215,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  opacity: 0; /* Inicia invisível para animação */
+  transform-origin: center center;
 }
 
 .featureIcon {
