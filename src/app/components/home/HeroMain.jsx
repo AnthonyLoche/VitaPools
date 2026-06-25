@@ -3,11 +3,16 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "@/assets/css/home/HeroMain.module.css";
 import hero_video from "@/assets/videos/hero_test.mp4";
 import hero_step2 from "@/assets/images/hero_step2.jpeg";
 import hero_step3 from "@/assets/videos/hero_step3.mp4";
 import hero_step5 from "@/assets/videos/hero.mp4";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 // ─── SCENE CONFIGURATION ─────────────────────────────────────────────────────
 const SCENES = [
@@ -41,14 +46,15 @@ const TRANSITION_DURATION = 0.75;
 
 // ─── MAIN COMPONENT ───────────────────────────────────────────────────────────
 const HeroMain = () => {
-  const heroRef        = useRef(null);
-  const videoRef       = useRef(null);
-  const overlayRef     = useRef(null);
-  const imageRef       = useRef(null);
-  const sceneRefs      = useRef([]);
-  const progressRef    = useRef(null);
-  const scrollLockRef  = useRef(false);
-  const currentScene   = useRef(0);
+  const heroRef = useRef(null);
+  const videoRef = useRef(null);
+  const overlayRef = useRef(null);
+  const imageRef = useRef(null);
+  const sceneRefs = useRef([]);
+  const progressRef = useRef(null);
+  const scrollLockRef = useRef(false);
+  const currentScene = useRef(0);
+  const isMounted = useRef(false);
   const [activeScene, setActiveScene] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
@@ -59,55 +65,51 @@ const HeroMain = () => {
     const media = scene.media;
 
     if (media.type === "video") {
-      // Fade out da imagem
       gsap.to(imageRef.current, {
         opacity: 0,
         duration: 0.5,
         ease: "power2.inOut",
         onComplete: () => {
           gsap.set(imageRef.current, { display: "none" });
-        }
+        },
       });
 
-      // Fade in do vídeo
       const video = videoRef.current;
       gsap.set(video, { display: "block", opacity: 0 });
-      
+
       if (!isInitial) {
         video.src = media.src;
         video.load();
         video.play().catch(() => {});
       }
-      
+
       gsap.to(video, {
         opacity: 1,
         duration: 0.8,
         ease: "power2.inOut",
       });
-      
+
       setImageSrc(null);
     } else if (media.type === "image") {
-      // Fade out do vídeo
       gsap.to(videoRef.current, {
         opacity: 0,
         duration: 0.5,
         ease: "power2.inOut",
         onComplete: () => {
           gsap.set(videoRef.current, { display: "none" });
-        }
+        },
       });
 
-      // Fade in da imagem
       const img = imageRef.current;
       gsap.set(img, { display: "block", opacity: 0 });
       img.src = media.src;
-      
+
       gsap.to(img, {
         opacity: 1,
         duration: 0.8,
         ease: "power2.inOut",
       });
-      
+
       setImageSrc(media.src.src);
     }
   }, []);
@@ -123,119 +125,127 @@ const HeroMain = () => {
   }, []);
 
   // ── Transition engine ──────────────────────────────────────────────────────
-  const transitionTo = useCallback((nextIdx) => {
-    if (scrollLockRef.current) return;
-    if (nextIdx < 0 || nextIdx >= SCENES.length) return;
-    if (nextIdx === currentScene.current) return;
+  const transitionTo = useCallback(
+    (nextIdx) => {
+      if (scrollLockRef.current) return;
+      if (nextIdx < 0 || nextIdx >= SCENES.length) return;
+      if (nextIdx === currentScene.current) return;
 
-    scrollLockRef.current = true;
-    setIsTransitioning(true);
+      scrollLockRef.current = true;
+      setIsTransitioning(true);
 
-    const prev = currentScene.current;
-    const prevEl = sceneRefs.current[prev];
-    const nextEl = sceneRefs.current[nextIdx];
-    const direction = nextIdx > prev ? 1 : -1;
-    const vidCfg = SCENES[nextIdx].video;
+      const prev = currentScene.current;
+      const prevEl = sceneRefs.current[prev];
+      const nextEl = sceneRefs.current[nextIdx];
+      const direction = nextIdx > prev ? 1 : -1;
+      const vidCfg = SCENES[nextIdx].video;
 
-    // ── TROCA O FUNDO COM FADE ──
-    changeBackground(nextIdx, false);
+      changeBackground(nextIdx, false);
 
-    // ── ANIMA O OVERLAY ──
-    gsap.to(overlayRef.current, {
-      opacity: SCENES[nextIdx].overlay,
-      duration: TRANSITION_DURATION,
-      ease: "power2.inOut",
-    });
-
-    // ── ANIMA O ZOOM DO VÍDEO (se for vídeo) ──
-    if (SCENES[nextIdx].media.type === "video") {
-      gsap.to(videoRef.current, {
-        scale: vidCfg.scale,
-        xPercent: parseFloat(vidCfg.x),
-        yPercent: parseFloat(vidCfg.y),
-        filter: `brightness(${vidCfg.brightness}) contrast(${vidCfg.contrast})`,
-        duration: TRANSITION_DURATION * 1.4,
-        ease: "power3.inOut",
+      gsap.to(overlayRef.current, {
+        opacity: SCENES[nextIdx].overlay,
+        duration: TRANSITION_DURATION,
+        ease: "power2.inOut",
       });
-    }
 
-    // ── EXIT: cena atual ──
-    gsap.to(prevEl, {
-      opacity: 0,
-      y: direction * -40,
-      filter: "blur(16px)",
-      scale: direction > 0 ? 0.94 : 1.06,
-      duration: TRANSITION_DURATION * 0.65,
-      ease: "power3.in",
-      onComplete: () => {
-        gsap.set(prevEl, { display: "none" });
-      },
-    });
+      if (SCENES[nextIdx].media.type === "video") {
+        gsap.to(videoRef.current, {
+          scale: vidCfg.scale,
+          xPercent: parseFloat(vidCfg.x),
+          yPercent: parseFloat(vidCfg.y),
+          filter: `brightness(${vidCfg.brightness}) contrast(${vidCfg.contrast})`,
+          duration: TRANSITION_DURATION * 1.4,
+          ease: "power3.inOut",
+        });
+      }
 
-    // ── ENTER: próxima cena ──
-    gsap.set(nextEl, {
-      display: "flex",
-      opacity: 0,
-      y: direction * 60,
-      filter: "blur(20px)",
-      scale: direction > 0 ? 1.06 : 0.94,
-    });
+      gsap.to(prevEl, {
+        opacity: 0,
+        y: direction * -40,
+        filter: "blur(16px)",
+        scale: direction > 0 ? 0.94 : 1.06,
+        duration: TRANSITION_DURATION * 0.65,
+        ease: "power3.in",
+        onComplete: () => {
+          gsap.set(prevEl, { display: "none" });
+        },
+      });
 
-    gsap.to(nextEl, {
-      opacity: 1,
-      y: 0,
-      filter: "blur(0px)",
-      scale: 1,
-      duration: TRANSITION_DURATION,
-      delay: TRANSITION_DURATION * 0.35,
-      ease: "power3.out",
-      onComplete: () => {
-        currentScene.current = nextIdx;
-        setActiveScene(nextIdx);
-        setIsTransitioning(false);
+      gsap.set(nextEl, {
+        display: "flex",
+        opacity: 0,
+        y: direction * 60,
+        filter: "blur(20px)",
+        scale: direction > 0 ? 1.06 : 0.94,
+      });
 
-        const children = nextEl.querySelectorAll(`.${styles.animChild}`);
-        if (children.length) {
-          gsap.fromTo(
-            children,
-            { opacity: 0, y: 24, filter: "blur(8px)" },
-            {
+      gsap.to(nextEl, {
+        opacity: 1,
+        y: 0,
+        filter: "blur(0px)",
+        scale: 1,
+        duration: TRANSITION_DURATION,
+        delay: TRANSITION_DURATION * 0.35,
+        ease: "power3.out",
+        onComplete: () => {
+          currentScene.current = nextIdx;
+          setActiveScene(nextIdx);
+          setIsTransitioning(false);
+
+          const children = nextEl.querySelectorAll(`.${styles.animChild}`);
+          if (children.length) {
+            gsap.to(children, {
               opacity: 1,
               y: 0,
               filter: "blur(0px)",
-              duration: 0.55,
-              stagger: 0.09,
-              ease: "power2.out",
-            }
-          );
-        }
+              duration: 0.7,
+              stagger: 0.08,
+              ease: "power3.out",
+            }); 
+          }
 
-        setTimeout(() => {
-          scrollLockRef.current = false;
-        }, 350);
-      },
-    });
-  }, [changeBackground]);
+          setTimeout(() => {
+            scrollLockRef.current = false;
+          }, 350);
+        },
+      });
+    },
+    [changeBackground],
+  );
 
   // ── Input handlers ─────────────────────────────────────────────────────────
   useEffect(() => {
-    // ── INICIAL ──
+    if (isMounted.current) return; // ← EVITA EXECUTAR DUAS VEZES
+    isMounted.current = true;
+
     const firstEl = sceneRefs.current[0];
     if (firstEl) {
-      gsap.set(firstEl, { display: "flex", opacity: 0, y: 30, filter: "blur(16px)", scale: 1.04 });
+      gsap.set(firstEl, {
+        display: "flex",
+        opacity: 0,
+        y: 30,
+        filter: "blur(16px)",
+        scale: 1.04,
+      });
       gsap.to(firstEl, {
-        opacity: 1, y: 0, filter: "blur(0px)", scale: 1,
-        duration: 1.0, delay: 0.25, ease: "power3.out",
-        onComplete: () => {
-          const children = firstEl.querySelectorAll(`.${styles.animChild}`);
-          if (children.length) {
-            gsap.fromTo(
-              children,
-              { opacity: 0, y: 20 },
-              { opacity: 1, y: 0, duration: 0.5, stagger: 0.1, ease: "power2.out" }
-            );
-          }
-        },
+        opacity: 1,
+        y: 0,
+        filter: "blur(0px)",
+        scale: 1,
+        duration: 1.0,
+        delay: 0.25,
+        ease: "power3.out",
+onComplete: () => {
+  const children = firstEl.querySelectorAll(`.${styles.animChild}`);
+
+  if (children.length) {
+    gsap.set(children, {
+      opacity: 1,
+      y: 0,
+      filter: "blur(0px)"
+    });
+  }
+}
       });
     }
 
@@ -243,10 +253,9 @@ const HeroMain = () => {
       if (i !== 0 && el) gsap.set(el, { display: "none" });
     });
 
-    // ── INICIAL: VIDEO ──
     const initialScene = SCENES[0];
     changeBackground(0, true);
-    
+
     if (initialScene.media.type === "video") {
       videoRef.current.src = initialScene.media.src;
       videoRef.current.load();
@@ -272,7 +281,9 @@ const HeroMain = () => {
 
       wheelAcc += e.deltaY;
       clearTimeout(wheelTimer);
-      wheelTimer = setTimeout(() => { wheelAcc = 0; }, 200);
+      wheelTimer = setTimeout(() => {
+        wheelAcc = 0;
+      }, 200);
 
       if (Math.abs(wheelAcc) >= WHEEL_THRESHOLD) {
         const dir = wheelAcc > 0 ? 1 : -1;
@@ -337,6 +348,7 @@ const HeroMain = () => {
       hero.removeEventListener("touchstart", onTouchStart);
       hero.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("keydown", onKeyDown);
+      isMounted.current = false;
     };
   }, [transitionTo, isLastScene, isFirstScene, changeBackground]);
 
@@ -348,7 +360,6 @@ const HeroMain = () => {
   return (
     <section ref={heroRef} className={styles.hero} id="inicio">
       <div className={styles.heroBg}>
-        {/* Vídeo */}
         <video
           ref={videoRef}
           autoPlay
@@ -357,91 +368,135 @@ const HeroMain = () => {
           playsInline
           className={styles.heroVideo}
         />
-        
-        {/* Imagem */}
+
         <img
           ref={imageRef}
           src={imageSrc || hero_step2}
           alt="Background"
           className={styles.heroImage}
         />
-        
+
         <div ref={overlayRef} className={styles.heroOverlay} />
         <div className={styles.vignette} />
       </div>
 
-      {/* ── SCENE 1 ── */}
+      {/* ── SCENES ── */}
       <div
         ref={(el) => (sceneRefs.current[0] = el)}
         className={`${styles.scene} ${styles.scene1}`}
       >
         <div className={styles.sceneInner}>
-          <span className={`${styles.eyebrow} ${styles.animChild}`}>VitaPools</span>
-          <h1 className={`${styles.displayTitle} ${styles.displayTitleLeft} ${styles.animChild}`}>
-            Água<br /><em>perfeita.</em>
+          <span className={`${styles.eyebrow} ${styles.animChild}`}>
+            VitaPools
+          </span>
+          <h1
+            className={`${styles.displayTitle} ${styles.displayTitleLeft} ${styles.animChild}`}
+          >
+            Água
+            <br />
+            <em>perfeita.</em>
           </h1>
           <p className={`${styles.lead} ${styles.animChild}`}>
-            Manutenção e limpeza de piscinas com qualidade, confiança e profissionalismo.
+            Manutenção e limpeza de piscinas com qualidade, confiança e
+            profissionalismo.
           </p>
           <div className={`${styles.buttonRow} ${styles.animChild}`}>
-            <Link href="/budget" className={styles.btnPrimary}>Pedir Orçamento</Link>
-            <Link href="/services" className={styles.btnGhost}>Ver Serviços</Link>
+            <Link href="/budget" className={styles.btnPrimary}>
+              Pedir Orçamento
+            </Link>
+            <Link href="/services" className={styles.btnGhost}>
+              Ver Serviços
+            </Link>
           </div>
         </div>
       </div>
 
-      {/* ── SCENE 2 ── */}
       <div
         ref={(el) => (sceneRefs.current[1] = el)}
         className={`${styles.scene} ${styles.scene2}`}
       >
         <div className={styles.sceneInner}>
           <p className={`${styles.sceneIndex} ${styles.animChild}`}>01</p>
-          <h2 className={`${styles.displayTitle} ${styles.displayTitleRight} ${styles.animChild}`}>
-            A água<br />merece<br /><em>atenção.</em>
+          <h2
+            className={`${styles.displayTitle} ${styles.displayTitleRight} ${styles.animChild}`}
+          >
+            A água
+            <br />
+            merece
+            <br />
+            <em>atenção.</em>
           </h2>
-          <p className={`${styles.lead} ${styles.leadRight} ${styles.animChild}`}>
-            Analisamos, tratamos e equilibramos a água para garantir segurança e qualidade.
+          <p
+            className={`${styles.lead} ${styles.leadRight} ${styles.animChild}`}
+          >
+            Analisamos, tratamos e equilibramos a água para garantir segurança e
+            qualidade.
           </p>
         </div>
       </div>
 
-      {/* ── SCENE 3 ── */}
       <div
         ref={(el) => (sceneRefs.current[2] = el)}
         className={`${styles.scene} ${styles.scene3}`}
       >
         <div className={`${styles.sceneInner} ${styles.sceneInnerCenter}`}>
           <p className={`${styles.sceneIndex} ${styles.animChild}`}>02</p>
-          <h2 className={`${styles.displayTitle} ${styles.displayTitleCenter} ${styles.animChild}`}>
-            Prevenção<br />antes<br /><em>do problema.</em>
+          <h2
+            className={`${styles.displayTitle} ${styles.displayTitleCenter} ${styles.animChild}`}
+          >
+            Prevenção
+            <br />
+            antes
+            <br />
+            <em>do problema.</em>
           </h2>
           <div className={`${styles.pillRow} ${styles.animChild}`}>
-            <span className={styles.pill}><span className={styles.pillCheck}>✓</span> Limpeza Completa</span>
-            <span className={styles.pill}><span className={styles.pillCheck}>✓</span> Tratamento Químico</span>
-            <span className={styles.pill}><span className={styles.pillCheck}>✓</span> Manutenção Preventiva</span>
+            <span className={styles.pill}>
+              <span className={styles.pillCheck}>✓</span> Limpeza Completa
+            </span>
+            <span className={styles.pill}>
+              <span className={styles.pillCheck}>✓</span> Tratamento Químico
+            </span>
+            <span className={styles.pill}>
+              <span className={styles.pillCheck}>✓</span> Manutenção Preventiva
+            </span>
           </div>
         </div>
       </div>
 
-      {/* ── SCENE 4 (FINAL) ── */}
       <div
         ref={(el) => (sceneRefs.current[3] = el)}
         className={`${styles.scene} ${styles.scene5}`}
       >
         <div className={`${styles.sceneInner} ${styles.sceneInnerCenter}`}>
-          <h2 className={`${styles.displayTitle} ${styles.displayTitleCenter} ${styles.animChild}`}>
-            Água<br />cristalina.<br /><em>Sempre.</em>
+          <h2
+            className={`${styles.displayTitle} ${styles.displayTitleCenter} ${styles.animChild}`}
+          >
+            Água
+            <br />
+            cristalina.
+            <br />
+            <em>Sempre.</em>
           </h2>
-          <div className={`${styles.buttonRow} ${styles.buttonRowCenter} ${styles.animChild}`}>
-            <Link href="/budget" className={styles.btnPrimary}>Solicitar Orçamento</Link>
-            <Link href="/services" className={styles.btnGhost}>Conhecer Serviços</Link>
+          <div
+            className={`${styles.buttonRow} ${styles.buttonRowCenter} ${styles.animChild}`}
+          >
+            <Link href="/budget" className={styles.btnPrimary}>
+              Solicitar Orçamento
+            </Link>
+            <Link href="/services" className={styles.btnGhost}>
+              Conhecer Serviços
+            </Link>
           </div>
         </div>
       </div>
 
       {/* ── PROGRESS ── */}
-      <nav ref={progressRef} className={styles.progress} aria-label="Navegação de cenas">
+      <nav
+        ref={progressRef}
+        className={styles.progress}
+        aria-label="Navegação de cenas"
+      >
         {SCENES.map((_, i) => (
           <button
             key={i}
@@ -452,7 +507,9 @@ const HeroMain = () => {
         ))}
       </nav>
 
-      <div className={`${styles.scrollHint} ${activeScene === 0 ? styles.scrollHintVisible : ""}`}>
+      <div
+        className={`${styles.scrollHint} ${activeScene === 0 ? styles.scrollHintVisible : ""}`}
+      >
         <span className={styles.scrollHintText}>scroll</span>
         <span className={styles.scrollHintLine} />
       </div>
