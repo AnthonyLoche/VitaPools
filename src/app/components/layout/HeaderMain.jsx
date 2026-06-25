@@ -55,7 +55,7 @@ const HeaderMain = () => {
   const navLinks = [
     { href: "/",          label: "Início" },
     { href: "/services",  label: "Serviços" },
-    { href: "/diagnosis", label: "Fazer Diagnóstico" },
+    { href: "/diagnosis", label: "Ferramentas" },
     { href: "/gallery",   label: "Galeria" },
   ];
 
@@ -103,7 +103,7 @@ const HeaderMain = () => {
         {/* Wave */}
         <div className={`${styles.waveContainer} ${menuOpen ? styles.waveHidden : ""}`}>
           <Wavify
-            fill="#0062a1"
+            fill="#000080"
             paused={false}
             options={{ height: 10, amplitude, speed: 0.25, points: 10 }}
           />
