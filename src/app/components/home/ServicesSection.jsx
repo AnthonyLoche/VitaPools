@@ -1,10 +1,22 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { ArrowRight } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "@/assets/css/home/ServicesSection.module.css";
 
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
 const ServicesSection = () => {
+  const sectionRef = useRef(null);
+  const badgeRef = useRef(null);
+  const titleRef = useRef(null);
+  const descriptionRef = useRef(null);
+  const cardRefs = useRef([]);
+
   const services = [
     {
       id: 1,
@@ -50,24 +62,148 @@ const ServicesSection = () => {
     },
   ];
 
+  useEffect(() => {
+    const cards = cardRefs.current;
+    const isMobile = window.innerWidth < 768;
+
+    // --- BADGE ---
+    gsap.fromTo(
+      badgeRef.current,
+      { opacity: 0, y: 20 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      }
+    );
+
+    // --- TÍTULO ---
+    gsap.fromTo(
+      titleRef.current,
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      }
+    );
+
+    // --- DESCRIÇÃO ---
+    gsap.fromTo(
+      descriptionRef.current,
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        delay: 0.2,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      }
+    );
+
+    // --- CARDS ---
+    const firstRow = cards.slice(0, 3);
+    const secondRow = cards.slice(3, 6);
+
+    const getCardAnimation = (index) => {
+      const isFirstRow = index < 3;
+
+      if (isMobile) {
+        // Mobile: intercalado esquerda/direita
+        const fromLeft = index % 2 === 0;
+        return {
+          opacity: 0,
+          x: fromLeft ? -80 : 80,
+          y: 0,
+        };
+      } else {
+        // Desktop: primeira linha vem de cima, segunda de baixo
+        return {
+          opacity: 0,
+          y: isFirstRow ? -60 : 60,
+          x: 0,
+        };
+      }
+    };
+
+    cards.forEach((card, index) => {
+      const from = getCardAnimation(index);
+      
+      gsap.fromTo(
+        card,
+        from,
+        {
+          opacity: 1,
+          y: 0,
+          x: 0,
+          duration: 0.7,
+          delay: index * 0.12,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+    });
+
+    // --- ATUALIZAR EM RESIZE ---
+    const handleResize = () => {
+      ScrollTrigger.refresh();
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      ScrollTrigger.getAll().forEach(st => st.kill());
+    };
+  }, []);
+
   return (
-    <section className={styles.services} id="servicos">
+    <section ref={sectionRef} className={styles.services} id="servicos">
       <div className={styles.container}>
         {/* Header */}
         <div className={styles.header}>
           <div>
-            <span className={styles.badge}>Nossos Serviços</span>
-            <h2 className={styles.title}>Soluções Completas para sua Piscina</h2>
+            <span ref={badgeRef} className={styles.badge}>
+              Nossos Serviços
+            </span>
+            <h2 ref={titleRef} className={styles.title}>
+              Soluções Completas para sua Piscina
+            </h2>
           </div>
-          <p className={styles.description}>
+          <p ref={descriptionRef} className={styles.description}>
             Desde a limpeza básica até ao controlo técnico avançado, garantimos que a sua piscina está sempre pronta para mergulhar.
           </p>
         </div>
 
         {/* Grid de Serviços */}
         <div className={styles.grid}>
-          {services.map((service) => (
-            <div key={service.id} className={styles.card}>
+          {services.map((service, index) => (
+            <div
+              key={service.id}
+              ref={(el) => (cardRefs.current[index] = el)}
+              className={styles.card}
+            >
               <img
                 alt={service.title}
                 className={styles.cardImage}

@@ -4,6 +4,7 @@
 .services {
   padding: 80px 0;
   background-color: #f7f9fc;
+  overflow: hidden; /* Evita overflow durante animações */
 }
 
 .container {
@@ -39,6 +40,7 @@
   font-size: 12px;
   text-transform: uppercase;
   font-family: "Geist", sans-serif;
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 .title {
@@ -49,6 +51,7 @@
   letter-spacing: -0.02em;
   color: #191c1e;
   margin-top: 8px;
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 .description {
@@ -58,6 +61,7 @@
   font-weight: 400;
   line-height: 1.6;
   color: #3f4752;
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 /* ============================================
@@ -92,6 +96,7 @@
   box-shadow:
     0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 .cardImage {

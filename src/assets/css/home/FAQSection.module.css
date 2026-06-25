@@ -4,10 +4,11 @@
 .faq {
   padding: 80px 0;
   background-color: #f2f4f7;
+  overflow: hidden;
 }
 
 .container {
-    width: 65%;
+  width: 65%;
   margin: 0 auto;
   padding: 0 24px;
 }
@@ -24,6 +25,7 @@
   color: #191c1e;
   text-align: center;
   margin-bottom: 48px;
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 @media (max-width: 768px) {
@@ -61,6 +63,7 @@
   border-radius: 16px;
   overflow: hidden;
   transition: box-shadow 0.3s ease;
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 .item:hover {
@@ -87,6 +90,7 @@
   color: #191c1e;
   transition: background 0.2s ease;
   gap: 16px;
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 .question:hover {
@@ -98,7 +102,7 @@
     font-size: 20px;
     padding: 20px;
   }
-  .container{
+  .container {
     width: 90%;
   }
 }
@@ -121,6 +125,7 @@
   flex-shrink: 0;
   color: #0062a1;
   transition: transform 0.3s ease;
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 .iconOpen {
@@ -149,6 +154,7 @@
   line-height: 1.6;
   color: #3f4752;
   margin: 0;
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 @media (max-width: 768px) {

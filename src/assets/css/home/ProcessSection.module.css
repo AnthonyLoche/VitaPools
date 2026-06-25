@@ -70,7 +70,7 @@
   position: absolute;
   right: -80px;
   top: -80px;
-  color: var(--color-primary);
+  color: #0062a1;
 }
 
 /* ============================================
@@ -87,8 +87,9 @@
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: -0.02em;
-  color: var(--color-primary);
+  color: #000080;
   margin-bottom: 16px;
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 .subtitle {
@@ -99,6 +100,7 @@
   color: #003257;
   max-width: 512px;
   margin: 0 auto;
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 /* ============================================
@@ -123,6 +125,8 @@
    ============================================ */
 .connector {
   display: none;
+  opacity: 0; /* Inicia invisível para animação */
+  transform-origin: center center;
 }
 
 @media (min-width: 768px) {
@@ -145,6 +149,7 @@
     z-index: 0;
     opacity: 0.6;
     box-shadow: 0 0 20px rgba(0, 98, 161, 0.3);
+    opacity: 0; /* Inicia invisível para animação */
   }
 
   /* Pontos na linha */
@@ -203,6 +208,7 @@
   position: relative;
   z-index: 1;
   text-align: center;
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 .stepIcon {
@@ -234,6 +240,7 @@
   line-height: 1.3;
   color: #003257;
   margin-bottom: 8px;
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 .stepDescription {
@@ -244,6 +251,7 @@
   color: rgba(0, 49, 87, 0.856);
   max-width: 200px;
   margin: 0 auto;
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 /* ============================================

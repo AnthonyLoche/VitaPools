@@ -4,6 +4,7 @@
 .benefits {
   padding: 80px 0;
   background-color: #f7f9fc;
+  overflow: hidden; /* Evita overflow durante animações */
 }
 
 .container {
@@ -28,6 +29,7 @@
   letter-spacing: -0.02em;
   color: #191c1e;
   margin-bottom: 16px;
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 .divider {
@@ -36,6 +38,7 @@
   background-color: #000080;
   border-radius: 9999px;
   margin: 0 auto;
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 /* ============================================
@@ -71,11 +74,13 @@
   padding: 32px;
   border-radius: 24px;
   border-left: 4px solid #0062a1;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  opacity: 0; /* Inicia invisível para animação */
 }
 
 .card:hover {
   transform: translateY(-8px);
+  box-shadow: 0 30px 60px rgba(4, 27, 45, 0.1);
 }
 
 .icon {
