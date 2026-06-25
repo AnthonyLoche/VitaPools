@@ -1,6 +1,7 @@
 import {
   HeaderMain,
   HeroMain,
+  Welcome,
   Reveal,
   BenefitsSection,
   ServicesSection,
@@ -17,6 +18,9 @@ export default function Home() {
     <>
       <HeaderMain />
       
+      {/* Welcome - ocupa 100vh com logo e ondas */}
+      <Welcome />
+
       {/* Hero com altura fixa e overflow hidden para capturar scroll */}
       <div style={{ height: '100vh', overflow: 'hidden', position: 'relative' }}>
         <HeroMain />
