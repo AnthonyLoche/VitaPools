@@ -6,18 +6,24 @@ const hankenGrotesk = Hanken_Grotesk({
   variable: "--font-hanken-grotesk",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+  display: "swap",
+  preload: true,
 });
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   weight: ["400", "500"],
+  display: "swap",
+  preload: true,
 });
 
 const geist = Geist({
   variable: "--font-geist",
   subsets: ["latin"],
   weight: ["400", "500"],
+  display: "swap",
+  preload: true,
 });
 
 export const metadata = {
@@ -46,6 +52,9 @@ export const metadata = {
     "tratamento de água de piscinas",
     "piscinas residenciais",
     "piscinas comerciais Portugal",
+    "manutenção de piscinas preço",
+    "limpeza de piscinas profissional",
+    "tratamento de piscinas verdes",
   ],
 
   authors: [
@@ -62,6 +71,9 @@ export const metadata = {
 
   alternates: {
     canonical: "/",
+    languages: {
+      "pt-PT": "/",
+    },
   },
 
   robots: {
@@ -82,43 +94,55 @@ export const metadata = {
     locale: "pt_PT",
     url: "https://www.vitapools.pt",
     siteName: "VitaPools",
-
     title: "VitaPools | Manutenção e Limpeza de Piscinas em Portugal",
-
     description:
       "Tratamento, manutenção e recuperação da sua piscina com qualidade, confiança e profissionalismo. Especialistas em limpeza e tratamento de piscinas.",
-
     images: [
       {
         url: "/opengraph-image.png",
         width: 1200,
         height: 630,
         alt: "VitaPools - Manutenção de Piscinas",
+        type: "image/png",
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-
     title: "VitaPools | Manutenção e Limpeza de Piscinas em Portugal",
-
     description:
       "Tratamento, manutenção e recuperação da sua piscina com qualidade, confiança e profissionalismo.",
-
     images: ["/opengraph-image.png"],
+    site: "@vitapools",
+    creator: "@vitapools",
   },
 
   icons: {
     icon: [
-      { url: "/favicon.ico" },
+      { url: "/favicon.ico", sizes: "any" },
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
       { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/favicon-512x512.png", sizes: "512x512", type: "image/png" },
     ],
-    apple: [{ url: "/apple-touch-icon.png" }],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+    shortcut: [{ url: "/favicon.ico" }],
   },
 
   manifest: "/site.webmanifest",
+};
+
+// Viewport export (separado para melhor performance)
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: "#000080",
+  colorScheme: "light",
 };
 
 export default function RootLayout({ children }) {
