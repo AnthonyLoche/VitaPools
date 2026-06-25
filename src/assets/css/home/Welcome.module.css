@@ -52,11 +52,9 @@
   0% {
     transform: translate(-5%, -3%) scale(1);
   }
-
   50% {
     transform: translate(5%, 4%) scale(1.15);
   }
-
   100% {
     transform: translate(-5%, -3%) scale(1);
   }
@@ -70,17 +68,16 @@
   inset: 0;
   z-index: 1;
   pointer-events: none;
-
   background:
     radial-gradient(
       circle at 50% 40%,
       rgba(0,157,255,0.15),
       transparent 60%
     );
-
   filter: blur(40px);
   animation: glowPulse 6s ease-in-out infinite;
 }
+
 @keyframes glowPulse {
   0%, 100% {
     opacity: 0.5;
@@ -187,24 +184,6 @@
   min-height: 1.2em;
 }
 
-/* ── CURSOR DO TÍTULO ── */
-.cursor {
-  display: inline-block;
-  animation: blink 0.8s step-end infinite;
-  color: #009dff;
-  font-weight: 300;
-  margin-left: 2px;
-}
-
-@keyframes blink {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-}
-
 /* ============================================
    SUBTITLE
    ============================================ */
@@ -217,15 +196,6 @@
   text-transform: uppercase;
   margin-top: 4px;
   min-height: 1.8em;
-}
-
-/* ── CURSOR DO SUBTÍTULO ── */
-.cursorSub {
-  display: inline-block;
-  animation: blink 0.8s step-end infinite;
-  color: rgba(0, 157, 255, 0.5);
-  font-weight: 300;
-  margin-left: 2px;
 }
 
 @media (max-width: 768px) {
@@ -285,16 +255,13 @@
     height: 40px;
     top: -10px;
   }
-
   .waveBottom {
     height: 50px;
     bottom: -10px;
   }
-
   .scrollIndicator {
     bottom: 24px;
   }
-
   .scrollLine {
     height: 28px;
   }
@@ -304,15 +271,12 @@
   .waveTop {
     height: 25px;
   }
-
   .waveBottom {
     height: 35px;
   }
-
   .scrollIndicator {
     bottom: 16px;
   }
-
   .scrollLine {
     height: 20px;
   }

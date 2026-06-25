@@ -21,7 +21,7 @@ const Welcome = ({ onComplete }) => {
   const fullTitle = "VitaPools";
   const fullSubtitle = "Manutenção e limpeza de piscinas";
 
-  // ── EFEITO DE DIGITAÇÃO ──
+  // ── EFEITO DE APARIÇÃO ──
   useEffect(() => {
     let mounted = true;
     let timeoutId;
@@ -31,24 +31,22 @@ const Welcome = ({ onComplete }) => {
         timeoutId = setTimeout(resolve, ms);
       });
 
-    const typeText = async () => {
-      // Título
-      for (let i = 0; i <= fullTitle.length; i++) {
-        if (!mounted) return;
-        setDisplayTitle(fullTitle.slice(0, i));
-        await wait(90);
-        if (!mounted) return;
-      }
-
+    const showText = async () => {
+      // Título - fade in do texto completo
       if (!mounted) return;
+      setDisplayTitle(fullTitle);
       await wait(400);
       if (!mounted) return;
 
-      // Subtítulo
-      for (let i = 0; i <= fullSubtitle.length; i++) {
+      // Subtítulo - palavra por palavra
+      const words = fullSubtitle.split(" ");
+      let currentText = "";
+      
+      for (let i = 0; i < words.length; i++) {
         if (!mounted) return;
-        setDisplaySubtitle(fullSubtitle.slice(0, i));
-        await wait(35);
+        currentText += (i === 0 ? "" : " ") + words[i];
+        setDisplaySubtitle(currentText);
+        await wait(200);
         if (!mounted) return;
       }
 
@@ -56,7 +54,7 @@ const Welcome = ({ onComplete }) => {
       setIsTypingComplete(true);
     };
 
-    typeText();
+    showText();
 
     return () => {
       mounted = false;
@@ -183,8 +181,8 @@ const Welcome = ({ onComplete }) => {
           fill="#000080"
           paused={false}
           options={{
-            height: 30,
-            amplitude: 25,
+            height: 80,
+            amplitude: 95,
             speed: 0.15,
             points: 5,
           }}
@@ -196,8 +194,8 @@ const Welcome = ({ onComplete }) => {
           fill="#000080"
           paused={false}
           options={{
-            height: 40,
-            amplitude: 35,
+            height: 80,
+            amplitude: 95,
             speed: 0.2,
             points: 6,
           }}
@@ -233,7 +231,6 @@ const Welcome = ({ onComplete }) => {
           }}
         >
           {displayTitle}
-          {!isTypingComplete && <span className={styles.cursor}>|</span>}
         </h1>
 
         <p
@@ -246,7 +243,6 @@ const Welcome = ({ onComplete }) => {
           }}
         >
           {displaySubtitle}
-          {!isTypingComplete && <span className={styles.cursorSub}>|</span>}
         </p>
 
         {/* Indicador de scroll */}

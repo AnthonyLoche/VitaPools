@@ -6,7 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "@/assets/css/home/HeroMain.module.css";
 import hero_video from "@/assets/videos/hero_test.mp4";
-import hero_step2 from "@/assets/images/hero_step2.jpeg";
+import hero_step2 from "@/assets/images/hero_step2.png";
 import hero_step3 from "@/assets/videos/hero_step3.mp4";
 import hero_step5 from "@/assets/videos/hero.mp4";
 
@@ -14,7 +14,6 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// ─── SCENE CONFIGURATION ─────────────────────────────────────────────────────
 const SCENES = [
   {
     id: "s1",
@@ -44,7 +43,6 @@ const SCENES = [
 
 const TRANSITION_DURATION = 0.75;
 
-// ─── MAIN COMPONENT ───────────────────────────────────────────────────────────
 const HeroMain = () => {
   const heroRef = useRef(null);
   const videoRef = useRef(null);
@@ -52,14 +50,12 @@ const HeroMain = () => {
   const imageRef = useRef(null);
   const sceneRefs = useRef([]);
   const progressRef = useRef(null);
-  const scrollLockRef = useRef(false);
+  const autoplayRef = useRef(null);
   const currentScene = useRef(0);
   const isMounted = useRef(false);
   const [activeScene, setActiveScene] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
 
-  // ── Função para trocar o fundo COM FADE ──────────────────────────────────
   const changeBackground = useCallback((sceneIndex, isInitial = false) => {
     const scene = SCENES[sceneIndex];
     const media = scene.media;
@@ -83,12 +79,7 @@ const HeroMain = () => {
         video.play().catch(() => {});
       }
 
-      gsap.to(video, {
-        opacity: 1,
-        duration: 0.8,
-        ease: "power2.inOut",
-      });
-
+      gsap.to(video, { opacity: 1, duration: 0.8, ease: "power2.inOut" });
       setImageSrc(null);
     } else if (media.type === "image") {
       gsap.to(videoRef.current, {
@@ -104,35 +95,15 @@ const HeroMain = () => {
       gsap.set(img, { display: "block", opacity: 0 });
       img.src = media.src;
 
-      gsap.to(img, {
-        opacity: 1,
-        duration: 0.8,
-        ease: "power2.inOut",
-      });
-
+      gsap.to(img, { opacity: 1, duration: 0.8, ease: "power2.inOut" });
       setImageSrc(media.src.src);
     }
   }, []);
 
-  // ── Verifica se está no último step ──────────────────────────────────────
-  const isLastScene = useCallback(() => {
-    return currentScene.current === SCENES.length - 1;
-  }, []);
-
-  // ── Verifica se está no primeiro step ─────────────────────────────────────
-  const isFirstScene = useCallback(() => {
-    return currentScene.current === 0;
-  }, []);
-
-  // ── Transition engine ──────────────────────────────────────────────────────
   const transitionTo = useCallback(
     (nextIdx) => {
-      if (scrollLockRef.current) return;
       if (nextIdx < 0 || nextIdx >= SCENES.length) return;
       if (nextIdx === currentScene.current) return;
-
-      scrollLockRef.current = true;
-      setIsTransitioning(true);
 
       const prev = currentScene.current;
       const prevEl = sceneRefs.current[prev];
@@ -190,7 +161,6 @@ const HeroMain = () => {
         onComplete: () => {
           currentScene.current = nextIdx;
           setActiveScene(nextIdx);
-          setIsTransitioning(false);
 
           const children = nextEl.querySelectorAll(`.${styles.animChild}`);
           if (children.length) {
@@ -201,25 +171,43 @@ const HeroMain = () => {
               duration: 0.7,
               stagger: 0.08,
               ease: "power3.out",
-            }); 
+            });
           }
-
-          setTimeout(() => {
-            scrollLockRef.current = false;
-          }, 350);
         },
       });
     },
     [changeBackground],
   );
 
-  // ── Input handlers ─────────────────────────────────────────────────────────
+  const startAutoplay = useCallback(
+    (firstDelay = 2500) => {
+      clearTimeout(autoplayRef.current);
+      clearInterval(autoplayRef.current);
+
+      autoplayRef.current = setTimeout(() => {
+        transitionTo((currentScene.current + 1) % SCENES.length);
+
+        autoplayRef.current = setInterval(() => {
+          transitionTo((currentScene.current + 1) % SCENES.length);
+        }, 2500);
+      }, firstDelay);
+    },
+    [transitionTo],
+  );
+
   useEffect(() => {
-    if (isMounted.current) return; // ← EVITA EXECUTAR DUAS VEZES
+    if (isMounted.current) return;
     isMounted.current = true;
+
+    currentScene.current = 0;
+    setActiveScene(0);
 
     const firstEl = sceneRefs.current[0];
     if (firstEl) {
+      sceneRefs.current.forEach((el, i) => {
+        if (el) gsap.set(el, { display: i === 0 ? "flex" : "none", opacity: 0 });
+      });
+
       gsap.set(firstEl, {
         display: "flex",
         opacity: 0,
@@ -227,6 +215,7 @@ const HeroMain = () => {
         filter: "blur(16px)",
         scale: 1.04,
       });
+
       gsap.to(firstEl, {
         opacity: 1,
         y: 0,
@@ -235,23 +224,14 @@ const HeroMain = () => {
         duration: 1.0,
         delay: 0.25,
         ease: "power3.out",
-onComplete: () => {
-  const children = firstEl.querySelectorAll(`.${styles.animChild}`);
-
-  if (children.length) {
-    gsap.set(children, {
-      opacity: 1,
-      y: 0,
-      filter: "blur(0px)"
-    });
-  }
-}
+        onComplete: () => {
+          const children = firstEl.querySelectorAll(`.${styles.animChild}`);
+          if (children.length) {
+            gsap.set(children, { opacity: 1, y: 0, filter: "blur(0px)" });
+          }
+        },
       });
     }
-
-    sceneRefs.current.forEach((el, i) => {
-      if (i !== 0 && el) gsap.set(el, { display: "none" });
-    });
 
     const initialScene = SCENES[0];
     changeBackground(0, true);
@@ -264,99 +244,24 @@ onComplete: () => {
 
     gsap.set(overlayRef.current, { opacity: initialScene.overlay });
 
-    // ── WHEEL ──
-    let wheelAcc = 0;
-    let wheelTimer = null;
-    const WHEEL_THRESHOLD = 60;
-
-    const onWheel = (e) => {
-      if (isLastScene() && e.deltaY > 0) return;
-      if (isFirstScene() && e.deltaY < 0) {
-        e.preventDefault();
-        return;
-      }
-
-      e.preventDefault();
-      if (scrollLockRef.current) return;
-
-      wheelAcc += e.deltaY;
-      clearTimeout(wheelTimer);
-      wheelTimer = setTimeout(() => {
-        wheelAcc = 0;
-      }, 200);
-
-      if (Math.abs(wheelAcc) >= WHEEL_THRESHOLD) {
-        const dir = wheelAcc > 0 ? 1 : -1;
-        const nextIdx = currentScene.current + dir;
-        if (nextIdx >= SCENES.length) return;
-        wheelAcc = 0;
-        transitionTo(nextIdx);
-      }
-    };
-
-    // ── TOUCH ──
-    let touchStartY = 0;
-    let touchMoved = false;
-
-    const onTouchStart = (e) => {
-      touchStartY = e.touches[0].clientY;
-      touchMoved = false;
-    };
-
-    const onTouchMove = (e) => {
-      const delta = touchStartY - e.touches[0].clientY;
-      if (isLastScene() && delta > 0) return;
-      if (isFirstScene() && delta < 0) {
-        e.preventDefault();
-        return;
-      }
-
-      e.preventDefault();
-      if (!touchMoved && Math.abs(delta) > 40) {
-        touchMoved = true;
-        const nextIdx = currentScene.current + (delta > 0 ? 1 : -1);
-        if (nextIdx >= 0 && nextIdx < SCENES.length) {
-          transitionTo(nextIdx);
-        }
-      }
-    };
-
-    // ── KEYBOARD ──
-    const onKeyDown = (e) => {
-      if (e.key === "ArrowDown" || e.key === "PageDown") {
-        if (isLastScene()) return;
-        e.preventDefault();
-        transitionTo(currentScene.current + 1);
-      } else if (e.key === "ArrowUp" || e.key === "PageUp") {
-        if (isFirstScene()) {
-          e.preventDefault();
-          return;
-        }
-        e.preventDefault();
-        transitionTo(currentScene.current - 1);
-      }
-    };
-
-    const hero = heroRef.current;
-    hero.addEventListener("wheel", onWheel, { passive: false });
-    hero.addEventListener("touchstart", onTouchStart, { passive: true });
-    hero.addEventListener("touchmove", onTouchMove, { passive: false });
-    window.addEventListener("keydown", onKeyDown);
+    // ── Primeiro step dura 10s, demais 2.5s
+    startAutoplay(8000);
 
     return () => {
-      hero.removeEventListener("wheel", onWheel);
-      hero.removeEventListener("touchstart", onTouchStart);
-      hero.removeEventListener("touchmove", onTouchMove);
-      window.removeEventListener("keydown", onKeyDown);
+      clearTimeout(autoplayRef.current);
+      clearInterval(autoplayRef.current);
+      currentScene.current = 0;
       isMounted.current = false;
     };
-  }, [transitionTo, isLastScene, isFirstScene, changeBackground]);
+  }, [transitionTo, changeBackground, startAutoplay]);
 
   const goToScene = (idx) => {
-    if (!scrollLockRef.current) transitionTo(idx);
+    clearTimeout(autoplayRef.current);
+    clearInterval(autoplayRef.current);
+    transitionTo(idx);
+    startAutoplay(2500);
   };
 
-  // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <section ref={heroRef} className={styles.hero} id="inicio">
       <div className={styles.heroBg}>
@@ -368,151 +273,70 @@ onComplete: () => {
           playsInline
           className={styles.heroVideo}
         />
-
         <img
           ref={imageRef}
           src={imageSrc || hero_step2}
           alt="Background"
           className={styles.heroImage}
         />
-
         <div ref={overlayRef} className={styles.heroOverlay} />
         <div className={styles.vignette} />
       </div>
 
-      {/* ── SCENES ── */}
-      <div
-        ref={(el) => (sceneRefs.current[0] = el)}
-        className={`${styles.scene} ${styles.scene1}`}
-      >
+      <div ref={(el) => (sceneRefs.current[0] = el)} className={`${styles.scene} ${styles.scene1}`}>
         <div className={styles.sceneInner}>
-          <span className={`${styles.eyebrow} ${styles.animChild}`}>
-            VitaPools
-          </span>
-          <h1
-            className={`${styles.displayTitle} ${styles.displayTitleLeft} ${styles.animChild}`}
-          >
-            Água
-            <br />
-            <em>perfeita.</em>
+          <span className={`${styles.eyebrow} ${styles.animChild}`}>VitaPools</span>
+          <h1 className={`${styles.displayTitle} ${styles.displayTitleLeft} ${styles.animChild}`}>
+            Água<br /><em>perfeita.</em>
           </h1>
           <p className={`${styles.lead} ${styles.animChild}`}>
-            Manutenção e limpeza de piscinas com qualidade, confiança e
-            profissionalismo.
+            Manutenção e limpeza de piscinas com qualidade, confiança e profissionalismo.
           </p>
           <div className={`${styles.buttonRow} ${styles.animChild}`}>
-            <Link href="/budget" className={styles.btnPrimary}>
-              Pedir Orçamento
-            </Link>
-            <Link href="/services" className={styles.btnGhost}>
-              Ver Serviços
-            </Link>
+            <Link href="/budget" className={styles.btnPrimary}>Pedir Orçamento</Link>
+            <Link href="/services" className={styles.btnGhost}>Ver Serviços</Link>
           </div>
         </div>
       </div>
 
-      <div
-        ref={(el) => (sceneRefs.current[1] = el)}
-        className={`${styles.scene} ${styles.scene2}`}
-      >
+      <div ref={(el) => (sceneRefs.current[1] = el)} className={`${styles.scene} ${styles.scene2}`}>
         <div className={styles.sceneInner}>
           <p className={`${styles.sceneIndex} ${styles.animChild}`}>01</p>
-          <h2
-            className={`${styles.displayTitle} ${styles.displayTitleRight} ${styles.animChild}`}
-          >
-            A água
-            <br />
-            merece
-            <br />
-            <em>atenção.</em>
+          <h2 className={`${styles.displayTitle} ${styles.displayTitleRight} ${styles.animChild}`}>
+            A água<br />merece<br /><em>atenção.</em>
           </h2>
-          <p
-            className={`${styles.lead} ${styles.leadRight} ${styles.animChild}`}
-          >
-            Analisamos, tratamos e equilibramos a água para garantir segurança e
-            qualidade.
+          <p className={`${styles.lead} ${styles.leadRight} ${styles.animChild}`}>
+            Analisamos, tratamos e equilibramos a água para garantir segurança e qualidade.
           </p>
         </div>
       </div>
 
-      <div
-        ref={(el) => (sceneRefs.current[2] = el)}
-        className={`${styles.scene} ${styles.scene3}`}
-      >
+      <div ref={(el) => (sceneRefs.current[2] = el)} className={`${styles.scene} ${styles.scene3}`}>
         <div className={`${styles.sceneInner} ${styles.sceneInnerCenter}`}>
           <p className={`${styles.sceneIndex} ${styles.animChild}`}>02</p>
-          <h2
-            className={`${styles.displayTitle} ${styles.displayTitleCenter} ${styles.animChild}`}
-          >
-            Prevenção
-            <br />
-            antes
-            <br />
-            <em>do problema.</em>
+          <h2 className={`${styles.displayTitle} ${styles.displayTitleCenter} ${styles.animChild}`}>
+            Prevenção<br />antes<br /><em>do problema.</em>
           </h2>
           <div className={`${styles.pillRow} ${styles.animChild}`}>
-            <span className={styles.pill}>
-              <span className={styles.pillCheck}>✓</span> Limpeza Completa
-            </span>
-            <span className={styles.pill}>
-              <span className={styles.pillCheck}>✓</span> Tratamento Químico
-            </span>
-            <span className={styles.pill}>
-              <span className={styles.pillCheck}>✓</span> Manutenção Preventiva
-            </span>
+            <span className={styles.pill}><span className={styles.pillCheck}>✓</span> Limpeza Completa</span>
+            <span className={styles.pill}><span className={styles.pillCheck}>✓</span> Tratamento Químico</span>
+            <span className={styles.pill}><span className={styles.pillCheck}>✓</span> Manutenção Preventiva</span>
           </div>
         </div>
       </div>
 
-      <div
-        ref={(el) => (sceneRefs.current[3] = el)}
-        className={`${styles.scene} ${styles.scene5}`}
-      >
+      <div ref={(el) => (sceneRefs.current[3] = el)} className={`${styles.scene} ${styles.scene5}`}>
         <div className={`${styles.sceneInner} ${styles.sceneInnerCenter}`}>
-          <h2
-            className={`${styles.displayTitle} ${styles.displayTitleCenter} ${styles.animChild}`}
-          >
-            Água
-            <br />
-            cristalina.
-            <br />
-            <em>Sempre.</em>
+          <h2 className={`${styles.displayTitle} ${styles.displayTitleCenter} ${styles.animChild}`}>
+            Água<br />cristalina.<br /><em>Sempre.</em>
           </h2>
-          <div
-            className={`${styles.buttonRow} ${styles.buttonRowCenter} ${styles.animChild}`}
-          >
-            <Link href="/budget" className={styles.btnPrimary}>
-              Solicitar Orçamento
-            </Link>
-            <Link href="/services" className={styles.btnGhost}>
-              Conhecer Serviços
-            </Link>
+          <div className={`${styles.buttonRow} ${styles.buttonRowCenter} ${styles.animChild}`}>
+            <Link href="/budget" className={styles.btnPrimary}>Solicitar Orçamento</Link>
+            <Link href="/services" className={styles.btnGhost}>Conhecer Serviços</Link>
           </div>
         </div>
       </div>
 
-      {/* ── PROGRESS ── */}
-      <nav
-        ref={progressRef}
-        className={styles.progress}
-        aria-label="Navegação de cenas"
-      >
-        {SCENES.map((_, i) => (
-          <button
-            key={i}
-            className={`${styles.progressDot} ${activeScene === i ? styles.progressDotActive : ""}`}
-            onClick={() => goToScene(i)}
-            aria-label={`Cena ${i + 1}`}
-          />
-        ))}
-      </nav>
-
-      <div
-        className={`${styles.scrollHint} ${activeScene === 0 ? styles.scrollHintVisible : ""}`}
-      >
-        <span className={styles.scrollHintText}>scroll</span>
-        <span className={styles.scrollHintLine} />
-      </div>
     </section>
   );
 };
