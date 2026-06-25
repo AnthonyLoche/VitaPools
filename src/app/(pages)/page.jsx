@@ -16,9 +16,8 @@ export default function Home() {
   return (
     <>
       <HeaderMain />
-      <Reveal>
         <HeroMain />
-      </Reveal>
+      
       <Reveal>
         <BenefitsSection />
       </Reveal>
