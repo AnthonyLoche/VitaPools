@@ -5,20 +5,17 @@ import Image from "next/image";
 import gsap from "gsap";
 import Wavify from "react-wavify";
 import styles from "@/assets/css/home/Welcome.module.css";
-import logo from "@/assets/images/logo_removed_white.png";
+import vita_h from "@/assets/images/logo_h_removed_white.png";
 
 const Welcome = ({ onComplete }) => {
   const containerRef = useRef(null);
-  const logoRef = useRef(null);
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
   const contentRef = useRef(null);
   const [isVisible, setIsVisible] = useState(true);
-  const [displayTitle, setDisplayTitle] = useState("");
   const [displaySubtitle, setDisplaySubtitle] = useState("");
   const [isTypingComplete, setIsTypingComplete] = useState(false);
 
-  const fullTitle = "VitaPools";
   const fullSubtitle = "Manutenção e limpeza de piscinas";
 
   // ── EFEITO DE APARIÇÃO ──
@@ -32,16 +29,12 @@ const Welcome = ({ onComplete }) => {
       });
 
     const showText = async () => {
-      // Título - fade in do texto completo
-      if (!mounted) return;
-      setDisplayTitle(fullTitle);
-      await wait(400);
+      await wait(600);
       if (!mounted) return;
 
-      // Subtítulo - palavra por palavra
       const words = fullSubtitle.split(" ");
       let currentText = "";
-      
+
       for (let i = 0; i < words.length; i++) {
         if (!mounted) return;
         currentText += (i === 0 ? "" : " ") + words[i];
@@ -60,22 +53,15 @@ const Welcome = ({ onComplete }) => {
       mounted = false;
       clearTimeout(timeoutId);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // ── ANIMAÇÕES GSAP DE ENTRADA ──
   useEffect(() => {
-    // Garante que não existam tweens "fantasmas" desses elementos
-    // de uma montagem anterior (ex: StrictMode em dev, remounts, etc.)
-    gsap.killTweensOf([
-      logoRef.current,
-      titleRef.current,
-      subtitleRef.current,
-    ]);
+    gsap.killTweensOf([titleRef.current, subtitleRef.current]);
 
     const tl = gsap.timeline({ delay: 0.2 });
 
-    tl.to(logoRef.current, {
+    tl.to(titleRef.current, {
       opacity: 1,
       scale: 1,
       y: 0,
@@ -83,19 +69,6 @@ const Welcome = ({ onComplete }) => {
       duration: 1.6,
       ease: "power4.out",
     });
-
-    tl.to(
-      titleRef.current,
-      {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        filter: "blur(0px)",
-        duration: 1.2,
-        ease: "power3.out",
-      },
-      "-=1",
-    );
 
     tl.to(
       subtitleRef.current,
@@ -111,7 +84,7 @@ const Welcome = ({ onComplete }) => {
 
     let floatTween;
     tl.call(() => {
-      floatTween = gsap.to(logoRef.current, {
+      floatTween = gsap.to(titleRef.current, {
         y: -8,
         duration: 3.5,
         repeat: -1,
@@ -123,11 +96,7 @@ const Welcome = ({ onComplete }) => {
     return () => {
       tl.kill();
       if (floatTween) floatTween.kill();
-      gsap.killTweensOf([
-        logoRef.current,
-        titleRef.current,
-        subtitleRef.current,
-      ]);
+      gsap.killTweensOf([titleRef.current, subtitleRef.current]);
     };
   }, []);
 
@@ -139,9 +108,7 @@ const Welcome = ({ onComplete }) => {
       const exitTl = gsap.timeline({
         onComplete: () => {
           setIsVisible(false);
-          if (onComplete) {
-            onComplete();
-          }
+          if (onComplete) onComplete();
         },
       });
 
@@ -172,20 +139,13 @@ const Welcome = ({ onComplete }) => {
 
   return (
     <section ref={containerRef} className={styles.welcome}>
-      {/* Fundo escuro */}
-      <div className={styles.background}></div>
+      <div className={styles.background} />
 
-      {/* Ondas Wavify */}
       <div className={styles.waveTop}>
         <Wavify
           fill="#000080"
           paused={false}
-          options={{
-            height: 80,
-            amplitude: 95,
-            speed: 0.15,
-            points: 5,
-          }}
+          options={{ height: 80, amplitude: 95, speed: 0.15, points: 5 }}
         />
       </div>
 
@@ -193,45 +153,28 @@ const Welcome = ({ onComplete }) => {
         <Wavify
           fill="#000080"
           paused={false}
-          options={{
-            height: 80,
-            amplitude: 95,
-            speed: 0.2,
-            points: 6,
-          }}
+          options={{ height: 80, amplitude: 95, speed: 0.2, points: 6 }}
         />
       </div>
 
-      {/* Conteúdo central */}
       <div ref={contentRef} className={styles.content}>
+        {/* Logo horizontal como título */}
         <div
-          ref={logoRef}
+          ref={titleRef}
           className={styles.logoWrapper}
           style={{
             opacity: 0,
-            transform: "scale(0.6) translateY(40px)",
+            transform: "scale(0.92) translateY(40px)",
             filter: "blur(20px)",
           }}
         >
           <Image
-            src={logo}
-            alt="VitaPools Logo"
-            className={styles.logo}
+            src={vita_h}
+            alt="VitaPools"
+            className={styles.logoHorizontal}
             priority
           />
         </div>
-
-        <h1
-          ref={titleRef}
-          className={styles.title}
-          style={{
-            opacity: 0,
-            transform: "scale(0.98) translateY(40px)",
-            filter: "blur(16px)",
-          }}
-        >
-          {displayTitle}
-        </h1>
 
         <p
           ref={subtitleRef}
@@ -245,14 +188,12 @@ const Welcome = ({ onComplete }) => {
           {displaySubtitle}
         </p>
 
-        {/* Indicador de scroll */}
         <div className={styles.scrollIndicator}>
-          <span className={styles.scrollLine}></span>
+          <span className={styles.scrollLine} />
         </div>
       </div>
 
-      {/* Brilho/reflexo de água */}
-      <div className={styles.waterGlow}></div>
+      <div className={styles.waterGlow} />
       <div className={styles.particles}>
         {[...Array(12)].map((_, i) => (
           <span

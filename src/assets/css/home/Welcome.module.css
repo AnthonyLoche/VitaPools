@@ -236,6 +236,25 @@
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), transparent);
 }
 
+/* Logo horizontal (substitui o título) */
+.logoHorizontal {
+  height: clamp(60px, 12vw, 130px);
+  width: auto;
+  filter: drop-shadow(0 0 30px rgba(0, 100, 200, 0.2));
+}
+
+@media (max-width: 768px) {
+  .logoHorizontal {
+    height: clamp(44px, 10vw, 80px);
+  }
+}
+
+@media (max-width: 480px) {
+  .logoHorizontal {
+    height: clamp(36px, 9vw, 60px);
+  }
+}
+
 @keyframes scrollPulse {
   0%, 100% {
     opacity: 0.3;
