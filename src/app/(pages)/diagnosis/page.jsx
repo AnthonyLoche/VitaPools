@@ -3,11 +3,11 @@
 "use client";
 
 import { HeaderMain, FooterMain } from "@/app/components";
-import DiagnosisHero from "@/app/components/Diagnosis/Hero";
-import SectionHeader from "@/app/components/Diagnosis/SectionHeader";
-import MedicoPiscina from "@/app/components/Diagnosis/MedicoPiscina";
-import AssistenteProdutos from "@/app/components/Diagnosis/AssistenteProdutos";
-import ContatoRapido from "@/app/components/Diagnosis/ContatoRapido";
+import DiagnosisHero from "@/app/components/diagnosis/Hero";
+import SectionHeader from "@/app/components/diagnosis/SectionHeader";
+import MedicoPiscina from "@/app/components/diagnosis/MedicoPiscina";
+import AssistenteProdutos from "@/app/components/diagnosis/AssistenteProdutos";
+import ContatoRapido from "@/app/components/diagnosis/ContatoRapido";
 import Reveal from "@/app/components/ui/Reveal";
 import styles from "@/assets/css/diagnosis/main.module.css";
 
