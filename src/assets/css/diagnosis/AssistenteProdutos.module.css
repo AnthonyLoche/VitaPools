@@ -1,0 +1,138 @@
+/* assets/css/diagnosis/AssistenteProdutos.module.css */
+
+.assistCard {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 24px 60px -24px rgba(0, 0, 128, 0.28);
+  border: 1px solid rgba(0, 0, 128, 0.06);
+}
+
+.assistRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.assistField label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #3a4750;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+.assistField input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid rgba(0, 0, 128, 0.1);
+  border-radius: 10px;
+  font-family: "Inter", sans-serif;
+  font-size: 15px;
+  background: #f7f9fc;
+  color: #000080;
+  transition: border-color 0.2s ease;
+}
+
+.assistField input:focus {
+  border-color: #0062a1;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 98, 161, 0.1);
+}
+
+.assistButton {
+  width: 100%;
+  padding: 14px;
+  background: #000080;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.assistButton:hover {
+  background: #000066;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -8px rgba(0, 0, 128, 0.3);
+}
+
+.assistResult {
+  margin-top: 20px;
+  padding: 20px 24px;
+  border-radius: 14px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.assistResult.success {
+  background: rgba(74, 222, 128, 0.08);
+  border: 1px solid rgba(74, 222, 128, 0.25);
+}
+
+.assistResult.action {
+  background: rgba(0, 98, 161, 0.08);
+  border: 1px solid rgba(0, 98, 161, 0.25);
+}
+
+.assistResult.warning {
+  background: rgba(248, 113, 113, 0.08);
+  border: 1px solid rgba(248, 113, 113, 0.25);
+}
+
+.assistResult h4 {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #000080;
+  margin-bottom: 6px;
+}
+
+.assistResult p {
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  color: #3a4750;
+  margin: 0;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .assistCard {
+    padding: 24px;
+  }
+
+  .assistRow {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+  .assistCard {
+    padding: 20px;
+    border-radius: 18px;
+  }
+
+  .assistRow {
+    grid-template-columns: 1fr;
+  }
+
+  .assistResult {
+    padding: 16px;
+  }
+}

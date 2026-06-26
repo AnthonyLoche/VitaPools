@@ -173,8 +173,8 @@ const Origin = () => {
 
             <div ref={quoteRef} className={styles.quote}>
               <p ref={quoteTextRef} className={styles.quoteText}>
-                "Uma piscina não se resolve com pressa — observa-se a água,
-                percebe-se o que ela está a dizer, e responde-se com calma."
+                Uma piscina não se resolve com pressa — observa-se a água,
+                percebe-se o que ela está a dizer, e responde-se com calma.
               </p>
 
               <p ref={quoteBodyRef} className={styles.quoteBody}>
