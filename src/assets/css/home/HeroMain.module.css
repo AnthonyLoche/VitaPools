@@ -135,13 +135,69 @@
 /* ── DISPLAY TITLE — the hero of every scene ────────────────── */
 .displayTitle {
   font-family: var(--hero-font-display);
-  font-size: clamp(4.5rem, 9.5vw, 11rem);
+  font-size: clamp(4rem, 9vw, 8rem);
   font-weight: 800;
   line-height: 0.92;
   letter-spacing: -0.04em;
   color: var(--hero-white);
   margin: 0 0 clamp(20px, 3vw, 40px) 0;
   text-shadow: 0 4px 40px rgba(5, 11, 24, 0.4);
+}
+
+/* ─── SCENE 1 LAYOUT ─── */
+.scene1 .sceneInner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: clamp(40px, 6vw, 100px);
+}
+
+.scene1Content {
+  display: flex;
+  flex-direction: column;
+}
+
+.scene1Logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.logoImage {
+  width: clamp(120px, 15vw, 220px);
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 40px rgba(0, 212, 200, 0.15));
+  transition: filter 0.3s ease;
+  margin-left: 12rem;
+  margin-bottom: 26rem;
+}
+
+.logoImage:hover {
+  filter: drop-shadow(0 8px 60px rgba(0, 212, 200, 0.3));
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+  .scene1 .sceneInner {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    text-align: center;
+  }
+
+  .scene1Content {
+    align-items: center;
+    text-align: center;
+  }
+
+  .scene1Logo {
+    justify-content: center;
+  }
+
+  .logoImage {
+    width: clamp(100px, 25vw, 160px);
+  }
 }
 
 /* Italic = aqua accent */

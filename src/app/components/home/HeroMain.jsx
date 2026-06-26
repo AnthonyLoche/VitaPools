@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "@/assets/css/home/HeroMain.module.css";
@@ -9,6 +10,7 @@ import hero_video from "@/assets/videos/hero_test.mp4";
 import hero_step2 from "@/assets/images/hero_step2.png";
 import hero_step3 from "@/assets/videos/hero_step3.mp4";
 import hero_step5 from "@/assets/videos/hero.mp4";
+import logo from "@/assets/images/logo_removed_white.png";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -283,18 +285,29 @@ const HeroMain = () => {
         <div className={styles.vignette} />
       </div>
 
+      {/* ─── SCENE 1 ─── */}
       <div ref={(el) => (sceneRefs.current[0] = el)} className={`${styles.scene} ${styles.scene1}`}>
         <div className={styles.sceneInner}>
-          <span className={`${styles.eyebrow} ${styles.animChild}`}>VitaPools</span>
-          <h1 className={`${styles.displayTitle} ${styles.displayTitleLeft} ${styles.animChild}`}>
-            Água<br /><em>perfeita.</em>
-          </h1>
-          <p className={`${styles.lead} ${styles.animChild}`}>
-            Manutenção e limpeza de piscinas com qualidade, confiança e profissionalismo.
-          </p>
-          <div className={`${styles.buttonRow} ${styles.animChild}`}>
-            <Link href="/budget" className={styles.btnPrimary}>Pedir Orçamento</Link>
-            <Link href="/services" className={styles.btnGhost}>Ver Serviços</Link>
+          <div className={styles.scene1Content}>
+            <span className={`${styles.eyebrow} ${styles.animChild}`}>VitaPools</span>
+            <h1 className={`${styles.displayTitle} ${styles.displayTitleLeft} ${styles.animChild}`}>
+              Transparência<br /><em>Confiança.</em><br />Profissionalismo.
+            </h1>
+            <p className={`${styles.lead} ${styles.animChild}`}>
+              Manutenção e limpeza de piscinas com qualidade, confiança e profissionalismo.
+            </p>
+            <div className={`${styles.buttonRow} ${styles.animChild}`}>
+              <Link href="/budget" className={styles.btnPrimary}>Pedir Orçamento</Link>
+              <Link href="/services" className={styles.btnGhost}>Ver Serviços</Link>
+            </div>
+          </div>
+          <div className={`${styles.scene1Logo} ${styles.animChild}`}>
+            <Image 
+              src={logo} 
+              alt="VitaPools Logo" 
+              className={styles.logoImage}
+              priority
+            />
           </div>
         </div>
       </div>
