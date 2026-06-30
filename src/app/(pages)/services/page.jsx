@@ -34,25 +34,26 @@ const ServicesPage = () => {
       ],
       cta: "Solicitar este serviço",
       layout: "image-left",
+      whatsappMessage: "Olá! Gostaria de solicitar informações sobre o serviço de *Limpeza Regular* para piscina. Podem entrar em contato comigo? Obrigado!",
     },
     {
       id: 2,
       title: "Manutenção Completa",
       subtitle: "Cuidado integral para todos os sistemas da sua piscina",
       description:
-        "A manutenção completa vai além da limpeza, abrangendo a verificação e otimização de todos os sistemas da piscina: filtração, bombagem, circulação e tratamento químico.\n\nEste serviço inclui a análise detalhada do equipamento, limpeza de filtros, verificação de bombas, deteção de fugas ou anomalias, e ajuste fino de todos os parâmetros para garantir o máximo de eficiência e durabilidade.\n\nIdeal para quem quer ter a certeza de que a piscina está a funcionar no seu melhor, com o mínimo de consumo energético e o máximo de qualidade da água.",
+        "A manutenção completa vai além da limpeza, abrangendo a verificação e otimização de todos os sistemas da piscina: filtração, bombagem, circulação e tratamento químico.\n\nEste serviço inclui a análise detalhada do equipamento, limpeza de filtros, verificação de bombas e ajuste fino de todos os parâmetros para garantir o máximo de eficiência e durabilidade.\n\nIdeal para quem quer ter a certeza de que a piscina está a funcionar no seu melhor, com o mínimo de consumo energético e o máximo de qualidade da água.",
       image: "https://lh3.googleusercontent.com/aida-public/AB6AXuD169t5XzocI1x74rOU9EVWywYoYHsUiY3J95WcYQ55TwyKTLGIbmP88xYZ5Ra7cyZYpa1OLtLdKJIgfb6cyB0u4bQUyJZk-0ESzCEpUOocWaFKHifdkOXHfwto4wZZU343rSBIpgMNw0kZVPHqgfunZrBnhA5x96ZA-UhiejpS5efjTqLwLjhLl9oejYCtajHoMmQ4WsQlUYpZnrCdWcTxxEhnO7g_KIhGA89St5Mk-3kwqCuiocixNr7UfoJaMKq3-0uJfS0anw",
       icon: Wrench,
       features: [
         "Verificação de filtros",
         "Inspeção de bombas",
         "Análise de circulação",
-        "Deteção de fugas e anomalias",
         "Otimização de eficiência",
         "Relatório técnico detalhado",
       ],
       cta: "Solicitar este serviço",
       layout: "image-right",
+      whatsappMessage: "Olá! Gostaria de solicitar informações sobre o serviço de *Manutenção Completa* para piscina. Podem entrar em contato comigo? Obrigado!",
     },
     {
       id: 3,
@@ -72,6 +73,7 @@ const ServicesPage = () => {
       ],
       cta: "Solicitar este serviço",
       layout: "image-left",
+      whatsappMessage: "Olá! Gostaria de solicitar informações sobre o serviço de *Tratamento Químico* para piscina. Podem entrar em contato comigo? Obrigado!",
     },
     {
       id: 4,
@@ -91,6 +93,7 @@ const ServicesPage = () => {
       ],
       cta: "Solicitar este serviço",
       layout: "image-right",
+      whatsappMessage: "Olá! Gostaria de solicitar informações sobre o serviço de *Recuperação de Água Verde* para piscina. Podem entrar em contato comigo? Obrigado!",
     },
     {
       id: 5,
@@ -110,6 +113,7 @@ const ServicesPage = () => {
       ],
       cta: "Solicitar este serviço",
       layout: "image-left",
+      whatsappMessage: "Olá! Gostaria de solicitar informações sobre o serviço de *Limpeza de Paredes e Fundo* para piscina. Podem entrar em contato comigo? Obrigado!",
     },
     {
       id: 6,
@@ -124,13 +128,15 @@ const ServicesPage = () => {
         "Monitorização preventiva",
         "Relatórios detalhados",
         "Recomendações técnicas",
-        "Deteção precoce de anomalias",
         "Longevidade dos equipamentos",
       ],
       cta: "Solicitar este serviço",
       layout: "image-right",
+      whatsappMessage: "Olá! Gostaria de solicitar informações sobre o serviço de *Controlo Técnico* para piscina. Podem entrar em contato comigo? Obrigado!",
     },
   ];
+
+  const phoneNumber = "351932096025";
 
   return (
     <>
@@ -153,6 +159,7 @@ const ServicesPage = () => {
       {services.map((service, index) => {
         const IconComponent = service.icon;
         const isImageLeft = service.layout === "image-left";
+        const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(service.whatsappMessage)}`;
 
         return (
           <section
@@ -201,7 +208,12 @@ const ServicesPage = () => {
                     ))}
                   </ul>
 
-                  <a href="/contato" className={styles.serviceCta}>
+                  <a 
+                    href={whatsappLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.serviceCta}
+                  >
                     {service.cta}
                     <ArrowRight size={18} />
                   </a>
@@ -226,7 +238,12 @@ const ServicesPage = () => {
               Fale connosco e descubra qual o serviço mais adequado para a sua piscina.
               Orçamento gratuito e sem compromisso.
             </p>
-            <a href="/contato" className={styles.finalCtaButton}>
+            <a 
+              href={`https://wa.me/${phoneNumber}?text=${encodeURIComponent("Olá! Visitei o site de vocês e gostaria de saber mais informações sobre os serviços de piscina. Podem me ajudar?")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.finalCtaButton}
+            >
               Fale connosco agora
               <ArrowRight size={20} />
             </a>
