@@ -24,6 +24,7 @@ import {
   CheckSquare,
   Square,
 } from "lucide-react";
+import gsap from "gsap";
 import styles from "@/assets/css/budget/main.module.css";
 import logo from "@/assets/images/logo_h_removed_white.png";
 
@@ -148,6 +149,24 @@ export default function BudgetPage() {
   const [showDone, setShowDone] = useState(false);
   const [errors, setErrors] = useState({});
 
+  // Refs para animações GSAP
+  const introRef = useRef(null);
+  const introLogoRef = useRef(null);
+  const introPreRef = useRef(null);
+  const introTitleRef = useRef(null);
+  const introWavesRef = useRef(null);
+
+  const formSceneRef = useRef(null);
+  const progressRef = useRef(null);
+  const depthInfoRef = useRef(null);
+  const cardRef = useRef(null);
+  const cardHeaderRef = useRef(null);
+  const cardBodyRef = useRef(null);
+  const cardActionsRef = useRef(null);
+
+  const doneRef = useRef(null);
+  const doneCardRef = useRef(null);
+
   const depthRef = useRef(0);
   const targetRef = useRef(0);
   const rafRef = useRef(null);
@@ -166,6 +185,120 @@ export default function BudgetPage() {
   });
 
   useEffect(() => { setMounted(true); }, []);
+
+  // --- ANIMAÇÃO DA INTRO ---
+  useEffect(() => {
+    if (step === 0 && introRef.current) {
+      const tl = gsap.timeline();
+
+      tl.fromTo(introLogoRef.current,
+        { opacity: 0, scale: 0.8, y: 30 },
+        { opacity: 1, scale: 1, y: 0, duration: 1.2, ease: "power4.out" }
+      )
+      .fromTo(introPreRef.current,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
+        "-=0.6"
+      )
+      .fromTo(introTitleRef.current,
+        { opacity: 0, y: 30, filter: "blur(10px)" },
+        { opacity: 1, y: 0, filter: "blur(0px)", duration: 1, ease: "power4.out" },
+        "-=0.4"
+      )
+      .fromTo(introWavesRef.current,
+        { opacity: 0, scale: 0.9 },
+        { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
+        "-=0.3"
+      );
+
+      return () => tl.kill();
+    }
+  }, [step]);
+
+  // --- ANIMAÇÃO DO FORMULÁRIO ---
+  useEffect(() => {
+    if (step >= 1 && step <= TOTAL_STEPS && visible && formSceneRef.current) {
+      const tl = gsap.timeline();
+
+      tl.fromTo(formSceneRef.current,
+        { opacity: 0, y: 20, scale: 0.97 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" }
+      )
+      .fromTo(progressRef.current,
+        { opacity: 0, y: -10 },
+        { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
+        "-=0.3"
+      )
+      .fromTo(depthInfoRef.current,
+        { opacity: 0, x: -10 },
+        { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" },
+        "-=0.2"
+      )
+      .fromTo(cardRef.current,
+        { opacity: 0, y: 30, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: "power3.out" },
+        "-=0.2"
+      )
+      .fromTo(cardHeaderRef.current,
+        { opacity: 0, y: 15 },
+        { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
+        "-=0.3"
+      )
+      .fromTo(cardBodyRef.current,
+        { opacity: 0, y: 15 },
+        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+        "-=0.2"
+      )
+      .fromTo(cardActionsRef.current,
+        { opacity: 0, y: 15 },
+        { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
+        "-=0.2"
+      );
+
+      return () => tl.kill();
+    }
+  }, [step, visible]);
+
+  // --- ANIMAÇÃO DO DONE ---
+  useEffect(() => {
+    if (step === TOTAL_STEPS + 1 && showDone && doneRef.current) {
+      const tl = gsap.timeline();
+
+      tl.fromTo(doneRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.5, ease: "power2.out" }
+      )
+      .fromTo(doneCardRef.current,
+        { opacity: 0, y: 40, scale: 0.9, filter: "blur(10px)" },
+        { 
+          opacity: 1, 
+          y: 0, 
+          scale: 1, 
+          filter: "blur(0px)", 
+          duration: 0.8, 
+          ease: "power3.out" 
+        },
+        "-=0.2"
+      );
+
+      // Anima o ícone de check com efeito de pulso
+      const iconWrapper = doneCardRef.current?.querySelector(`.${styles.doneIconWrapper}`);
+      if (iconWrapper) {
+        gsap.fromTo(iconWrapper,
+          { scale: 0.5, opacity: 0 },
+          { 
+            scale: 1, 
+            opacity: 1, 
+            duration: 0.8, 
+            delay: 0.3, 
+            ease: "back.out(1.7)" 
+          }
+        );
+      }
+
+      return () => tl.kill();
+    }
+  }, [step, showDone]);
 
   useEffect(() => {
     const tick = () => {
@@ -376,14 +509,16 @@ export default function BudgetPage() {
       )}
 
       {step === 0 && (
-        <div className={`${styles.intro} ${visible ? styles.in : styles.out}`}>
+        <div ref={introRef} className={`${styles.intro} ${visible ? styles.in : styles.out}`}>
           <div className={styles.introContent}>
-            <Image alt="VitaPools" className={styles.introLogo}
+            <Image 
+              ref={introLogoRef}
+              alt="VitaPools" 
+              className={styles.introLogo}
               src={logo}
             />
-            <p className={styles.introPre}>VitaPools</p>
-            <h1 className={styles.introTitle}>Vamos fazer um orçamento<br />à sua medida</h1>
-            <div className={styles.introWaves} aria-hidden="true">
+            <h1 ref={introTitleRef} className={styles.introTitle}>Vamos fazer um orçamento<br />à sua medida</h1>
+            <div ref={introWavesRef} className={styles.introWaves} aria-hidden="true">
               {[0, 1, 2].map((i) => (
                 <div key={i} className={styles.introWaveDot} style={{ "--d": `${i * 0.25}s` }} />
               ))}
@@ -393,18 +528,18 @@ export default function BudgetPage() {
       )}
 
       {step >= 1 && step <= TOTAL_STEPS && (
-        <div className={`${styles.formScene} ${visible ? styles.in : styles.out}`}>
+        <div ref={formSceneRef} className={`${styles.formScene} ${visible ? styles.in : styles.out}`}>
           <DepthMeter pct={meterPct} />
 
           <div className={styles.formWrap}>
-            <div className={styles.progressRow}>
+            <div ref={progressRef} className={styles.progressRow}>
               <div className={styles.progressTrack}>
                 <div className={styles.progressFill} style={{ width: `${(step / TOTAL_STEPS) * 100}%` }} />
               </div>
               <span className={styles.progressLabel}>{step} / {TOTAL_STEPS}</span>
             </div>
 
-            <div className={styles.depthInfo}>
+            <div ref={depthInfoRef} className={styles.depthInfo}>
               <div className={styles.depthBadge}>
                 <Droplets size={13} />
                 {DEPTH_DATA[step - 1]?.label}
@@ -412,12 +547,12 @@ export default function BudgetPage() {
               <span className={styles.depthSub}>{DEPTH_DATA[step - 1]?.sub}</span>
             </div>
 
-            <div className={styles.card}>
-              <div className={styles.cardHeader}>
+            <div ref={cardRef} className={styles.card}>
+              <div ref={cardHeaderRef} className={styles.cardHeader}>
                 <div className={styles.iconWrap}><DepthIcon step={step} /></div>
                 <h2 className={styles.cardTitle}>{STEP_TITLES[step]}</h2>
               </div>
-              <div className={styles.cardBody}>
+              <div ref={cardBodyRef} className={styles.cardBody}>
                 <StepFields
                   step={step}
                   formData={formData}
@@ -425,7 +560,7 @@ export default function BudgetPage() {
                   errors={errors}
                 />
               </div>
-              <div className={styles.cardActions}>
+              <div ref={cardActionsRef} className={styles.cardActions}>
                 <button onClick={prev} className={styles.btnBack} aria-label="Voltar">
                   <ArrowLeft size={16} />
                   Voltar
@@ -450,8 +585,8 @@ export default function BudgetPage() {
       )}
 
       {step === TOTAL_STEPS + 1 && (
-        <div className={`${styles.done} ${showDone ? styles.doneAppear : ''}`}>
-          <div className={`${styles.doneCard} ${visible ? styles.doneCardIn : styles.doneCardOut}`}>
+        <div ref={doneRef} className={`${styles.done} ${showDone ? styles.doneAppear : ''}`}>
+          <div ref={doneCardRef} className={`${styles.doneCard} ${visible ? styles.doneCardIn : styles.doneCardOut}`}>
             <div className={styles.doneIconWrapper}>
               <div className={styles.doneIconPulse}>
                 <div className={styles.doneIcon}>
