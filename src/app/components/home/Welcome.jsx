@@ -18,7 +18,7 @@ const Welcome = ({ onComplete }) => {
 
   const fullSubtitle = "Manutenção e limpeza de piscinas";
 
-  // ── EFEITO DE APARIÇÃO ──
+  // ── EFEITO DE DIGITAÇÃO DE BAIXO PARA CIMA ──
   useEffect(() => {
     let mounted = true;
     let timeoutId;
@@ -29,17 +29,27 @@ const Welcome = ({ onComplete }) => {
       });
 
     const showText = async () => {
-      await wait(600);
+      await wait(500);
       if (!mounted) return;
 
-      const words = fullSubtitle.split(" ");
+      const chars = fullSubtitle.split("");
       let currentText = "";
+      
+      // Começa com todas as letras transparentes
+      setDisplaySubtitle(fullSubtitle);
 
-      for (let i = 0; i < words.length; i++) {
+      // Animação de revelação de baixo para cima
+      for (let i = 0; i < chars.length; i++) {
         if (!mounted) return;
-        currentText += (i === 0 ? "" : " ") + words[i];
-        setDisplaySubtitle(currentText);
-        await wait(200);
+        
+        // Revela a letra atual com efeito de fade
+        const charElements = document.querySelectorAll('.char-reveal');
+        if (charElements[i]) {
+          charElements[i].style.opacity = '1';
+          charElements[i].style.transform = 'translateY(0)';
+        }
+        
+        await wait(50); // Velocidade da animação
         if (!mounted) return;
       }
 
@@ -135,6 +145,35 @@ const Welcome = ({ onComplete }) => {
     return () => clearTimeout(delayId);
   }, [isTypingComplete, onComplete]);
 
+  // ── RENDERIZA O SUBTÍTULO COM LETRAS INDIVIDUAIS ──
+  const renderSubtitleWithAnimation = () => {
+    const chars = fullSubtitle.split("");
+    
+    return chars.map((char, index) => {
+      // Espaços são importantes para manter a formatação
+      const isSpace = char === " ";
+      const displayChar = isSpace ? "\u00A0" : char; // Usa non-breaking space para espaços
+      
+      return (
+        <span
+          key={index}
+          className="char-reveal"
+          style={{
+            display: "inline-block",
+            opacity: 0,
+            transform: "translateY(20px)",
+            transition: `all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)`,
+            transitionDelay: `${index * 0.04}s`, // Delay progressivo para cada letra
+            position: "relative",
+            ...(isSpace && { width: "0.3em" }), // Largura para espaços
+          }}
+        >
+          {displayChar}
+        </span>
+      );
+    });
+  };
+
   if (!isVisible) return null;
 
   return (
@@ -183,9 +222,13 @@ const Welcome = ({ onComplete }) => {
             opacity: 0,
             transform: "translateY(24px)",
             filter: "blur(10px)",
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          {displaySubtitle}
+          {renderSubtitleWithAnimation()}
         </p>
 
         <div className={styles.scrollIndicator}>
