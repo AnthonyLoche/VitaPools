@@ -1,6 +1,7 @@
+// src/app/pages/services/page.jsx
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { HeaderMain, FooterMain } from "@/app/components";
 import {
   Droplets,
@@ -35,6 +36,7 @@ const ServicesPage = () => {
       cta: "Solicitar este serviço",
       layout: "image-left",
       whatsappMessage: "Olá! Gostaria de solicitar informações sobre o serviço de *Limpeza Regular* para piscina. Podem entrar em contato comigo? Obrigado!",
+      anchor: "limpeza-regular", // Adicionar anchor único
     },
     {
       id: 2,
@@ -54,6 +56,7 @@ const ServicesPage = () => {
       cta: "Solicitar este serviço",
       layout: "image-right",
       whatsappMessage: "Olá! Gostaria de solicitar informações sobre o serviço de *Manutenção Completa* para piscina. Podem entrar em contato comigo? Obrigado!",
+      anchor: "manutencao-completa",
     },
     {
       id: 3,
@@ -74,6 +77,7 @@ const ServicesPage = () => {
       cta: "Solicitar este serviço",
       layout: "image-left",
       whatsappMessage: "Olá! Gostaria de solicitar informações sobre o serviço de *Tratamento Químico* para piscina. Podem entrar em contato comigo? Obrigado!",
+      anchor: "tratamento-quimico",
     },
     {
       id: 4,
@@ -94,6 +98,7 @@ const ServicesPage = () => {
       cta: "Solicitar este serviço",
       layout: "image-right",
       whatsappMessage: "Olá! Gostaria de solicitar informações sobre o serviço de *Recuperação de Água Verde* para piscina. Podem entrar em contato comigo? Obrigado!",
+      anchor: "recuperacao-agua-verde",
     },
     {
       id: 5,
@@ -114,6 +119,7 @@ const ServicesPage = () => {
       cta: "Solicitar este serviço",
       layout: "image-left",
       whatsappMessage: "Olá! Gostaria de solicitar informações sobre o serviço de *Limpeza de Paredes e Fundo* para piscina. Podem entrar em contato comigo? Obrigado!",
+      anchor: "limpeza-paredes-fundo",
     },
     {
       id: 6,
@@ -133,10 +139,27 @@ const ServicesPage = () => {
       cta: "Solicitar este serviço",
       layout: "image-right",
       whatsappMessage: "Olá! Gostaria de solicitar informações sobre o serviço de *Controlo Técnico* para piscina. Podem entrar em contato comigo? Obrigado!",
+      anchor: "controlo-tecnico",
     },
   ];
 
   const phoneNumber = "351932096025";
+
+  // Efeito para scroll para a âncora quando a página carregar
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const hash = window.location.hash;
+      if (hash) {
+        // Pequeno delay para garantir que a página carregou completamente
+        setTimeout(() => {
+          const element = document.querySelector(hash);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }, 300);
+      }
+    }
+  }, []);
 
   return (
     <>
@@ -164,6 +187,7 @@ const ServicesPage = () => {
         return (
           <section
             key={service.id}
+            id={service.anchor} // Adicionar ID para âncora
             className={`${styles.serviceSection} ${index % 2 === 0 ? styles.sectionEven : styles.sectionOdd}`}
           >
             <div className={styles.serviceContainer}>

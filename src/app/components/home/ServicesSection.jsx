@@ -1,3 +1,4 @@
+// src/app/components/home/ServicesSection.jsx
 "use client";
 
 import React, { useEffect, useRef } from "react";
@@ -24,6 +25,7 @@ const ServicesSection = () => {
       description: "Manutenção semanal ou quinzenal para manter a sua piscina impecável todo o ano.",
       image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB1iY3zpw5f-w1oJ0Ot1BgXsELZ4sunRJwhOHeFa5LUq_pgDV1rRmGQacHn5dgNkpbrsD3x6EKkk_3zVSg-i4-gT-ebEFQWF15kYo61Zuc7Y-ya_w8wRYPzWprTFnV3spQglsebdb0YK3XRfXessUwJp4p7Z8nYa7VeHk9809ZQ-AdLr0aodKJlng0Hwzb0zLsTVwkmitkDMqDJjxHU8_b4VLISSlqQ_RKnibIEBphu6tzQ_4M8rYuT4WBcX5h0o6396aRduPmsBA",
       buttonText: "Saiba Mais",
+      anchor: "limpeza-regular", // Adicionar anchor correspondente
     },
     {
       id: 2,
@@ -31,6 +33,7 @@ const ServicesSection = () => {
       description: "Verificação de filtros, bombas e sistemas de circulação incluídos no pacote.",
       image: "https://lh3.googleusercontent.com/aida-public/AB6AXuD169t5XzocI1x74rOU9EVWywYoYHsUiY3J95WcYQ55TwyKTLGIbmP88xYZ5Ra7cyZYpa1OLtLdKJIgfb6cyB0u4bQUyJZk-0ESzCEpUOocWaFKHifdkOXHfwto4wZZU343rSBIpgMNw0kZVPHqgfunZrBnhA5x96ZA-UhiejpS5efjTqLwLjhLl9oejYCtajHoMmQ4WsQlUYpZnrCdWcTxxEhnO7g_KIhGA89St5Mk-3kwqCuiocixNr7UfoJaMKq3-0uJfS0anw",
       buttonText: "Saiba Mais",
+      anchor: "manutencao-completa",
     },
     {
       id: 3,
@@ -38,6 +41,7 @@ const ServicesSection = () => {
       description: "Ajuste rigoroso de pH, cloro e alcalinidade para uma água equilibrada e segura.",
       image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop",
       buttonText: "Consultar",
+      anchor: "tratamento-quimico",
     },
     {
       id: 4,
@@ -45,6 +49,7 @@ const ServicesSection = () => {
       description: "Tratamento de choque para piscinas abandonadas ou com excesso de algas.",
       image: "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=800&h=600&fit=crop",
       buttonText: "Consultar",
+      anchor: "recuperacao-agua-verde",
     },
     {
       id: 5,
@@ -52,6 +57,7 @@ const ServicesSection = () => {
       description: "Remoção mecânica e manual de resíduos incrustados nas superfícies.",
       image: "https://images.unsplash.com/photo-1530549387789-4c1017266635?w=800&h=600&fit=crop",
       buttonText: "Consultar",
+      anchor: "limpeza-paredes-fundo",
     },
     {
       id: 6,
@@ -59,8 +65,23 @@ const ServicesSection = () => {
       description: "Relatórios de estado e monitorização preventiva de todos os sistemas de apoio.",
       image: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&h=600&fit=crop",
       buttonText: "Consultar",
+      anchor: "controlo-tecnico",
     },
   ];
+
+  // Função para navegar para a página de serviços com âncora
+  const handleServiceClick = (anchor) => {
+    // Se estiver na página de serviços, faz scroll suave
+    if (window.location.pathname === "/services") {
+      const element = document.getElementById(anchor);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    } else {
+      // Se estiver em outra página, navega para /services com a âncora
+      window.location.href = `/services#${anchor}`;
+    }
+  };
 
   useEffect(() => {
     const cards = cardRefs.current;
@@ -212,7 +233,10 @@ const ServicesSection = () => {
               <div className={styles.overlay}>
                 <h3 className={styles.cardTitle}>{service.title}</h3>
                 <p className={styles.cardDescription}>{service.description}</p>
-                <button className={styles.cardButton}>
+                <button 
+                  className={styles.cardButton}
+                  onClick={() => handleServiceClick(service.anchor)}
+                >
                   {service.buttonText}
                   <ArrowRight size={20} />
                 </button>
