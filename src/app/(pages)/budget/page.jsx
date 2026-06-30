@@ -319,7 +319,7 @@ export default function BudgetPage() {
 
   const handleWhatsApp = () => {
     const message = generateWhatsAppMessage();
-    window.open(`https://wa.me/5547992236761?text=${message}`, "_blank");
+    window.open(`https://wa.me/351932096025?text=${message}`, "_blank");
   };
 
   if (!mounted) return <div className={styles.shell} />;

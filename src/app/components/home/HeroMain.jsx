@@ -316,7 +316,7 @@ const HeroMain = () => {
         <div className={styles.sceneInner}>
           <p className={`${styles.sceneIndex} ${styles.animChild}`}>01</p>
           <h2 className={`${styles.displayTitle} ${styles.displayTitleRight} ${styles.animChild}`}>
-            A água<br />merece<br /><em>atenção.</em>
+            Atuamos em<br /><em>Mafra</em><br />Ericeira.
           </h2>
           <p className={`${styles.lead} ${styles.leadRight} ${styles.animChild}`}>
             Analisamos, tratamos e equilibramos a água para garantir segurança e qualidade.
