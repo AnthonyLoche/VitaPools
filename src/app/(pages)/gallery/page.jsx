@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { HeaderMain, FooterMain } from "@/app/components";
 import {
@@ -12,7 +12,13 @@ import {
   Image as ImageIcon,
   Video,
 } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "@/assets/css/gallery/main.module.css";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 // Imagens importadas
 import img001 from "@/assets/images/gallery/img001.jpg";
@@ -147,9 +153,212 @@ export default function GalleryPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const videoRef = useRef(null);
 
+  // Refs para animações
+  const heroRef = useRef(null);
+  const badgeRef = useRef(null);
+  const titleRef = useRef(null);
+  const descriptionRef = useRef(null);
+  const waveRef = useRef(null);
+  const filterBarRef = useRef(null);
+  const filterButtonsRef = useRef([]);
+  const statsRef = useRef(null);
+  const gridRef = useRef(null);
+  const gridItemsRef = useRef([]);
+
   const filteredItems = galleryItems.filter(
     (item) => filter === "all" || item.category === filter
   );
+
+  // --- ANIMAÇÕES DO HERO ---
+  useEffect(() => {
+    // Badge
+    gsap.fromTo(
+      badgeRef.current,
+      { opacity: 0, y: 20, scale: 0.9 },
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.8,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      }
+    );
+
+    // Título
+    gsap.fromTo(
+      titleRef.current,
+      { opacity: 0, y: 30, filter: "blur(10px)" },
+      {
+        opacity: 1,
+        y: 0,
+        filter: "blur(0px)",
+        duration: 1,
+        delay: 0.2,
+        ease: "power4.out",
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      }
+    );
+
+    // Descrição
+    gsap.fromTo(
+      descriptionRef.current,
+      { opacity: 0, y: 25, filter: "blur(8px)" },
+      {
+        opacity: 1,
+        y: 0,
+        filter: "blur(0px)",
+        duration: 0.9,
+        delay: 0.4,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      }
+    );
+
+    // Wave
+    gsap.fromTo(
+      waveRef.current,
+      { opacity: 0 },
+      {
+        opacity: 1,
+        duration: 1.2,
+        delay: 0.6,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      }
+    );
+
+    // Parallax no hero
+    const heroContent = heroRef.current?.querySelector(`.${styles.heroContent}`);
+    if (heroContent) {
+      gsap.to(heroContent, {
+        y: 20,
+        duration: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 0.5,
+        },
+      });
+    }
+
+    return () => {
+      ScrollTrigger.getAll().forEach(st => st.kill());
+    };
+  }, []);
+
+  // --- ANIMAÇÕES DA FILTER BAR ---
+  useEffect(() => {
+    // Filter Bar
+    gsap.fromTo(
+      filterBarRef.current,
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.7,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: filterBarRef.current,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      }
+    );
+
+    // Botões do filtro (um por um)
+    filterButtonsRef.current.forEach((button, index) => {
+      if (button) {
+        gsap.fromTo(
+          button,
+          { opacity: 0, y: 20, scale: 0.9 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.5,
+            delay: 0.1 + index * 0.06,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: filterBarRef.current,
+              start: "top 85%",
+              toggleActions: "play none none none",
+            },
+          }
+        );
+      }
+    });
+
+    // Stats
+    gsap.fromTo(
+      statsRef.current,
+      { opacity: 0, x: 20 },
+      {
+        opacity: 1,
+        x: 0,
+        duration: 0.5,
+        delay: 0.4,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: filterBarRef.current,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      }
+    );
+  }, []);
+
+  // --- ANIMAÇÕES DOS ITENS DO GRID ---
+  useEffect(() => {
+    // Aguarda os itens serem renderizados
+    const items = gridItemsRef.current;
+    if (items.length === 0) return;
+
+    // Anima cada item do grid
+    items.forEach((item, index) => {
+      if (item) {
+        gsap.fromTo(
+          item,
+          { opacity: 0, y: 40, scale: 0.95 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.7,
+            delay: index * 0.08,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: gridRef.current,
+              start: "top 80%",
+              toggleActions: "play none none none",
+            },
+          }
+        );
+      }
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach(st => st.kill());
+    };
+  }, [filter]); // Re-anima quando o filtro muda
 
   const openLightbox = (index) => {
     const actualIndex = galleryItems.indexOf(filteredItems[index]);
@@ -191,28 +400,38 @@ export default function GalleryPage() {
     }
   };
 
+  // Reset das referências quando o filtro muda
+  useEffect(() => {
+    gridItemsRef.current = [];
+  }, [filter]);
+
   return (
     <>
       <HeaderMain />
       <main className={styles.main}>
-        <section className={styles.hero}>
+        <section ref={heroRef} className={styles.hero}>
           <div className={styles.heroContent}>
-            <span className={styles.heroBadge}>Galeria</span>
-            <h1 className={styles.heroTitle}>O nosso trabalho em imagens</h1>
-            <p className={styles.heroDescription}>
+            <span ref={badgeRef} className={styles.heroBadge}>
+              Galeria
+            </span>
+            <h1 ref={titleRef} className={styles.heroTitle}>
+              O nosso trabalho em imagens
+            </h1>
+            <p ref={descriptionRef} className={styles.heroDescription}>
               Veja alguns dos nossos projetos e transformações realizadas em piscinas
               na região de Mafra, Ericeira e arredores.
             </p>
           </div>
-          <div className={styles.heroWave}></div>
+          <div ref={waveRef} className={styles.heroWave}></div>
         </section>
 
         <div className={styles.container}>
-          <div className={styles.filterBar}>
+          <div ref={filterBarRef} className={styles.filterBar}>
             <div className={styles.filterScroll}>
-              {categories.map((cat) => (
+              {categories.map((cat, index) => (
                 <button
                   key={cat.id}
+                  ref={(el) => (filterButtonsRef.current[index] = el)}
                   className={`${styles.filterButton} ${
                     filter === cat.id ? styles.filterActive : ""
                   }`}
@@ -222,15 +441,16 @@ export default function GalleryPage() {
                 </button>
               ))}
             </div>
-            <div className={styles.filterStats}>
+            <div ref={statsRef} className={styles.filterStats}>
               <span>{filteredItems.length} itens</span>
             </div>
           </div>
 
-          <div className={styles.grid}>
+          <div ref={gridRef} className={styles.grid}>
             {filteredItems.map((item, index) => (
               <div
                 key={item.id}
+                ref={(el) => (gridItemsRef.current[index] = el)}
                 className={styles.gridItem}
                 onClick={() => openLightbox(index)}
               >
@@ -369,7 +589,7 @@ export default function GalleryPage() {
           </div>
         </div>
       )}
-        <FooterMain />
+      <FooterMain />
     </>
   );
 }
